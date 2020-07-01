@@ -74,8 +74,8 @@ const selectElements = () => {
 
     setMessageButton.addEventListener("click", function () {
       document.getElementById("addMessage").disabled = false;
-      const messageSelected = messagetext.value;
-      const emojiSelected = emojiselector.value;
+      const messageSelected = messageText.value;
+      const emojiSelected = emojiSelector.value;
       buttonText.push(messageSelected);
       buttonEmoji.push(emojiSelected);
       changeableEmojis = changeableEmojis.filter(
