@@ -17,6 +17,9 @@ img {
 .ButtonWrapperCss {
   align-items: center;
 }
+.addAndRemoveButtons {
+  text-align: center;
+}
 .notOnTinder {
   margin: 0 0 20px;
 }
