@@ -76,8 +76,8 @@ const selectElements = () => {
       document.getElementById("addMessage").disabled = false;
       const messageSelected = messageText.value;
       const emojiSelected = emojiSelector.value;
-      buttonname.push(messageSelected);
-      buttonvalue.push(emojiSelected);
+      buttonText.push(messageSelected);
+      buttonEmoji.push(emojiSelected);
       changeableEmojis = changeableEmojis.filter(
         (emoji) => emoji != emojiSelector.value
       );
@@ -97,7 +97,7 @@ const selectElements = () => {
   });
 };
 
-function getButtonsNamesFromStorage() {
+function getButtonTextFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ name: [] }, function (result) {
@@ -109,7 +109,7 @@ function getButtonsNamesFromStorage() {
   });
 }
 
-function getButtonsValuesFromStorage() {
+function getButtonEmojiFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ value: [] }, function (result) {
@@ -133,15 +133,15 @@ function getEmojisFromStorage() {
 }
 
 async function updatePopup() {
-  buttonname = await getButtonsNamesFromStorage();
-  buttonvalue = await getButtonsValuesFromStorage();
-  emojis = await getEmojisFromStorage();
+  buttonText = await getButtonsNamesFromStorage();
+  buttonEmoji = await getButtonsValuesFromStorage();
+  changeableEmojis = await getEmojisFromStorage();
 
-  if (buttonname.length == predefinedemojis.length) {
+  if (buttonText.length == predefinedemojis.length) {
     document.getElementById("add").disabled = true;
   }
 
-  if (emojis.length == 0 && buttonname.length == 0) {
+  if (changeableEmojis.length == 0 && buttonText.length == 0) {
     emojis = predefinedemojis;
   } /*else{
       if(emojis.length==0){
@@ -149,43 +149,48 @@ async function updatePopup() {
       }
     }*/
 
-  for (let i = 0; i < buttonname.length; i++) {
-    var messagetext = document.createElement("input");
-    messagetext.type = "text";
-    messagetext.value = buttonname[i];
-    messagetext.readOnly = true;
-    messagetext.id = "storagetext";
-    addbtn.insertAdjacentElement("beforebegin", messagetext);
+  for (let i = 0; i < buttonText.length; i++) {
+    const messageContainer = document.createElement("div");
+    messageContainer.id = "messageContainer";
 
-    var emojiselector = document.createElement("input");
-    emojiselector.type = "button";
-    emojiselector.value = buttonvalue[i];
-    emojiselector.id = "emoji";
-    messagetext.insertAdjacentElement("afterend", emojiselector);
+    const messageText = document.createElement("input");
+    messageText.type = "text";
+    messageText.value = buttonText[i];
+    messageText.readOnly = true;
+    messageText.id = "storagetext";
 
-    var deletefrompopup = document.createElement("input");
-    deletefrompopup.type = "button";
-    deletefrompopup.value = "×";
-    deletefrompopup.id = "deletefrompopup";
-    emojiselector.insertAdjacentElement("afterend", deletefrompopup);
+    messageContainer.appendChild(messageText);
+    addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
 
-    deletefrompopup.onclick = function () {
-      console.log(buttonname);
+    const emojiSelector = document.createElement("input");
+    emojiSelector.type = "button";
+    emojiSelector.value = buttonvalue[i];
+    emojiSelector.id = "emoji";
+    messageText.insertAdjacentElement("afterend", emojiselector);
+
+    var deleteFromPopup = document.createElement("input");
+    deleteFromPopup.type = "button";
+    deleteFromPopup.value = "×";
+    deleteFromPopup.id = "deletefrompopup";
+    emojiSelector.insertAdjacentElement("afterend", deletefromPopup);
+
+    deletefromPopup.onclick = function () {
+      //console.log(buttonname);
       //if(emojis.length>=predefinedemojis.length){
-      emojis.push(buttonvalue[i]);
+      changeableEmojis.push(buttonEmoji[i]);
       //emojis=emojis.filter(emoji => emoji=buttonvalue[i]);
       //}
-      buttonname = buttonname.filter((name) => name != buttonname[i]);
-      buttonvalue = buttonvalue.filter((value) => value != buttonvalue[i]);
-      console.log(buttonname);
-      chrome.storage.local.set({ name: buttonname }, function () {
-        console.log("name is set to:", buttonname);
+      buttonText = buttonText.filter((name) => name != buttonText[i]);
+      buttonEmoji = buttonEmoji.filter((value) => value != buttonEmoji[i]);
+      //console.log(buttonname);
+      chrome.storage.local.set({ name: buttonText }, function () {
+        console.log("name is set to:", buttonText);
       });
-      chrome.storage.local.set({ value: buttonvalue }, function () {
-        console.log("value is set to:", buttonvalue);
+      chrome.storage.local.set({ value: buttonEmoji }, function () {
+        console.log("value is set to:", buttonEmoji);
       });
-      chrome.storage.local.set({ emojis: emojis }, function () {
-        console.log("value is set to:", emojis);
+      chrome.storage.local.set({ emojis: changeableEmojis }, function () {
+        console.log("value is set to:", changeableEmojis);
       });
       chrome.tabs.sendMessage(tabId, { removebutton: "remove" });
 
