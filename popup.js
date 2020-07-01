@@ -67,7 +67,7 @@ const selectElements = () => {
     setMessageButton.className = "addbutton";
     emojiSelector.insertAdjacentElement("afterend", setMessageButton);
     messageText.addEventListener("keydown", function () {
-      messageText.value > 0 ? (setMessageButton.disabled = false) : "";
+      messageText.value.length > 0 ? (setMessageButton.disabled = false) : "";
     });
   });
 };
