@@ -76,6 +76,8 @@ const selectElements = () => {
       document.getElementById("addMessage").disabled = false;
       const message = messageText.value;
       const emoji = emojiSelector.value;
+      console.log(message);
+      console.log(emoji);
       buttonText.push(message);
       buttonEmoji.push(emoji);
       changeableEmojis = changeableEmojis.filter(
