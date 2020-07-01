@@ -96,3 +96,100 @@ const selectElements = () => {
     });
   });
 };
+
+function getButtonsNamesFromStorage() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      chrome.storage.local.get({ name: [] }, function (result) {
+        console.log(result.name);
+        resolve(result.name);
+        console.log(buttonname);
+      });
+    }, 0);
+  });
+}
+
+function getButtonsValuesFromStorage() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      chrome.storage.local.get({ value: [] }, function (result) {
+        console.log(result.value);
+        resolve(result.value);
+        console.log(buttonname);
+      });
+    }, 0);
+  });
+}
+
+function getEmojisFromStorage() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      chrome.storage.local.get({ emojis: [] }, function (result) {
+        console.log(result.emojis);
+        resolve(result.emojis);
+      });
+    }, 0);
+  });
+}
+
+async function updatePopup() {
+  buttonname = await getButtonsNamesFromStorage();
+  buttonvalue = await getButtonsValuesFromStorage();
+  emojis = await getEmojisFromStorage();
+
+  if (buttonname.length == predefinedemojis.length) {
+    document.getElementById("add").disabled = true;
+  }
+
+  if (emojis.length == 0 && buttonname.length == 0) {
+    emojis = predefinedemojis;
+  } /*else{
+      if(emojis.length==0){
+        emojis=predefinedemojis.filter(emoji => !buttonvalue.includes(emoji));
+      }
+    }*/
+
+  for (let i = 0; i < buttonname.length; i++) {
+    var messagetext = document.createElement("input");
+    messagetext.type = "text";
+    messagetext.value = buttonname[i];
+    messagetext.readOnly = true;
+    messagetext.id = "storagetext";
+    addbtn.insertAdjacentElement("beforebegin", messagetext);
+
+    var emojiselector = document.createElement("input");
+    emojiselector.type = "button";
+    emojiselector.value = buttonvalue[i];
+    emojiselector.id = "emoji";
+    messagetext.insertAdjacentElement("afterend", emojiselector);
+
+    var deletefrompopup = document.createElement("input");
+    deletefrompopup.type = "button";
+    deletefrompopup.value = "×";
+    deletefrompopup.id = "deletefrompopup";
+    emojiselector.insertAdjacentElement("afterend", deletefrompopup);
+
+    deletefrompopup.onclick = function () {
+      console.log(buttonname);
+      //if(emojis.length>=predefinedemojis.length){
+      emojis.push(buttonvalue[i]);
+      //emojis=emojis.filter(emoji => emoji=buttonvalue[i]);
+      //}
+      buttonname = buttonname.filter((name) => name != buttonname[i]);
+      buttonvalue = buttonvalue.filter((value) => value != buttonvalue[i]);
+      console.log(buttonname);
+      chrome.storage.local.set({ name: buttonname }, function () {
+        console.log("name is set to:", buttonname);
+      });
+      chrome.storage.local.set({ value: buttonvalue }, function () {
+        console.log("value is set to:", buttonvalue);
+      });
+      chrome.storage.local.set({ emojis: emojis }, function () {
+        console.log("value is set to:", emojis);
+      });
+      chrome.tabs.sendMessage(tabId, { removebutton: "remove" });
+
+      window.close();
+    };
+  }
+}
