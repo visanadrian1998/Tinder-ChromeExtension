@@ -41,8 +41,32 @@ const selectElements = () => {
   });
 
   addMessageButton.addEventListener("click", function () {
-    const messagetext = document.createElement("input");
-    messagetext.type = "text";
-    addMessageButton.insertAdjacentElement("beforebegin", messagetext);
+    const messageContainer = document.createElement("div");
+
+    const messageText = document.createElement("input");
+    messageText.type = "text";
+
+    const emojiSelector = document.createElement("select");
+    for (i = 0; i < emojis.length; i++) {
+      const option = document.createElement("option");
+      option.innerHTML = emojis[i];
+      emojiSelector.add(option);
+    }
+
+    messageText.insertAdjacentElement("afterend", emojiSelector);
+
+    const setMessageButton = document.createElement("input");
+    addMessageButton.disabled = true;
+    setMessageButton.disabled = true;
+    setMessageButton.type = "button";
+    setMessageButton.value = "SET!";
+    setMessageButton.className = "addbutton";
+    emojiSelector.insertAdjacentElement("afterend", setMessageButton);
+    messageText.addEventListener("keydown", function () {
+      messagebtn.disabled = false;
+    });
+
+    messageContainer.appendChild(messageText);
+    addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
   });
 };
