@@ -87,7 +87,7 @@ const selectElements = () => {
       chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
       setMessageButton.disabled = true;
       messageText.readOnly = true;
-      // messagebtn.classList.add("disappear");
+      setMessageButton.display = "none";
       emojiSelector.disabled = true;
       if (changeableEmojis.length == 0) {
         document.getElementById("addMessage").disabled = true;
