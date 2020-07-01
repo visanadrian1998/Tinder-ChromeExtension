@@ -13,6 +13,9 @@ const runApp = (tab) => {
     notOnTinder = document.getElementById("not-tinder");
     messageList.style.display = "none";
     notOnTinder.style.display = "inline";
+    notOnTinder.onClick = () => {
+      chrome.tabs.create({ url: "https://tinder.com", active: true });
+    };
   }
 };
 
@@ -22,9 +25,3 @@ window.addEventListener("DOMContentLoaded", () =>
     (tabs) => tabs.length && runApp(tabs[0])
   )
 );
-
-if (notOnTinder) {
-  notOnTinder.onClick = () => {
-    chrome.tabs.create({ url: "https://tinder.com", active: true });
-  };
-}
