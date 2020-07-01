@@ -1,9 +1,10 @@
 .PopupWrapperCss {
   width: 450px;
-  background-image: linear-gradient(200deg, #ffffff 0%, #84fab0 100%);
   text-align: center;
 }
 body {
+  background-image: linear-gradient(200deg, #ffffff 0%, #84fab0 100%);
+
   margin: 0;
 }
 h1 {
@@ -112,12 +113,11 @@ button:disabled {
   background: #f44336;
   color: white;
   border-radius: 50%;
-  margin: 0;
+  margin: 0 5px 0;
   font-size: 15px;
   font-weight: bold;
   box-shadow: 0;
   transition: 0.8s;
-  margin-left: 3px;
 }
 
 #deletefrompopup:hover {
