@@ -84,7 +84,11 @@ const selectElements = () => {
       chrome.storage.local.set({ emojis: changeableEmojis }, function () {
         console.log("emojis are set to:", changeableEmojis);
       });
-      chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
+      chrome.tabs.sendMessage(
+        tabId,
+        { addmessage: message, addemoji: emoji },
+        function () {}
+      );
       setMessageButton.disabled = true;
       messageText.readOnly = true;
       // messagebtn.classList.add("disappear");
