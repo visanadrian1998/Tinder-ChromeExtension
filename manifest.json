@@ -1,0 +1,30 @@
+{
+  "name": "Auto Messager",
+  "version": "2.1.6",
+  "manifest_version": 2,
+  "permissions": [
+    "*://*/*",
+    "file://*/*",
+    "storage",
+    "activeTab",
+    "tabs",
+    "alarms",
+    "declarativeContent"
+  ],
+  "browser_action": {
+    "default_title": "Auto Messager",
+    "default_icon": "tinder128.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "css": ["style.css"],
+      "matches": ["https://*.tinder.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "background": {
+    "persistent": false,
+    "scripts": ["background.js"]
+  }
+}
