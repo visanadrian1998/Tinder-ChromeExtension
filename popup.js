@@ -31,7 +31,7 @@ window.addEventListener("DOMContentLoaded", () =>
 );
 
 const selectElements = () => {
-  const addMessageButton = document.getElementById("addMessage");
+  addMessageButton = document.getElementById("addMessage");
   const removeAllMessagesButton = document.getElementById("removeAllButtons");
 
   removeAllMessagesButton.addEventListener("click", function () {
