@@ -54,6 +54,7 @@ button:disabled {
 }
 #messageContainer {
   display: inline-block;
+  width: 100%;
 }
 #textInput {
   vertical-align: middle;
