@@ -13,7 +13,8 @@ const runApp = (tab) => {
     notOnTinder = document.getElementById("notOnTinder");
     addAndRemoveButtons.style.display = "none";
     notOnTinder.style.display = "inline";
-    notOnTinder.onClick = () => {
+    tinderLink = document.getElementById("openTinder");
+    tinderLink.onClick = () => {
       chrome.tabs.create({ url: "https://tinder.com", active: true });
     };
   }
