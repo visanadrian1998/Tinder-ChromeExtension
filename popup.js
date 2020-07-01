@@ -66,6 +66,6 @@ const selectElements = () => {
     setMessageButton.value = "SET!";
     setMessageButton.className = "addbutton";
     emojiSelector.insertAdjacentElement("afterend", setMessageButton);
-    messageText.length > 0 ? (setMessageButton.disabled = false) : "";
+    messageText.value > 0 ? (setMessageButton.disabled = false) : "";
   });
 };
