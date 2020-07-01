@@ -77,7 +77,6 @@ const selectElements = () => {
     setMessageButton.disabled = true;
     setMessageButton.type = "button";
     setMessageButton.value = "SET!";
-    setMessageButton.className = "addbutton";
     setMessageButton.id = "setMessageButton";
 
     //INSERT SET BUTTON AFTER EMOJI SELECTOR
@@ -110,7 +109,6 @@ const selectElements = () => {
       //TEXT INPUT AND EMOJI SELECTOR DISABLED;SET BUTTON DISSAPEARS
       messageText.readOnly = true;
       setMessageButton.style.display = "none";
-      //setMessageButton.classList.add("disappear");
       emojiSelector.disabled = true;
 
       //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
@@ -121,6 +119,7 @@ const selectElements = () => {
   });
 };
 
+//GET ALL MESSAGES FROM STORAGE
 function getButtonTextFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
@@ -131,6 +130,7 @@ function getButtonTextFromStorage() {
   });
 }
 
+//GET THE USED EMOJIS FROM STORAGE
 function getButtonEmojiFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
@@ -146,6 +146,7 @@ function getEmojisFromStorage() {
     setTimeout(function () {
       chrome.storage.local.get({ emojis: [] }, function (result) {
         resolve(result.emojis);
+        console.log(result.emojis);
       });
     }, 0);
   });

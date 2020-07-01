@@ -95,15 +95,12 @@ button:disabled {
   height: 22px;
   width: 50px;
 }
-.disappear {
-  display: none;
-}
+
 #removeAllButtons {
   background-color: #f44336;
   border: 1px solid #f44336;
 }
 #removeAllButtons:hover {
-  /*opacity:0.85;*/
   background-color: rgba(0, 0, 0, 0);
   color: #f44336;
 }
