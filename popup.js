@@ -135,7 +135,7 @@ async function updatePopup() {
   changeableEmojis = await getEmojisFromStorage();
 
   if (buttonText.length == stockEmojis.length) {
-    document.getElementById("add").disabled = true;
+    document.getElementById("addMessage").disabled = true;
   }
 
   if (changeableEmojis.length == 0 && buttonText.length == 0) {
@@ -161,17 +161,17 @@ async function updatePopup() {
 
     const emojiSelector = document.createElement("input");
     emojiSelector.type = "button";
-    emojiSelector.value = buttonvalue[i];
+    emojiSelector.value = buttonEmoji[i];
     emojiSelector.id = "emoji";
-    messageText.insertAdjacentElement("afterend", emojiselector);
+    messageText.insertAdjacentElement("afterend", emojiSelector);
 
     var deleteFromPopup = document.createElement("input");
     deleteFromPopup.type = "button";
     deleteFromPopup.value = "×";
     deleteFromPopup.id = "deletefrompopup";
-    emojiSelector.insertAdjacentElement("afterend", deletefromPopup);
+    emojiSelector.insertAdjacentElement("afterend", deleteFromPopup);
 
-    deletefromPopup.onclick = function () {
+    deleteFromPopup.onclick = function () {
       //console.log(buttonname);
       //if(emojis.length>=predefinedemojis.length){
       changeableEmojis.push(buttonEmoji[i]);
