@@ -36,7 +36,7 @@ const selectElements = () => {
 
   removeAllMessagesButton.addEventListener("click", function () {
     chrome.tabs.sendMessage(tabId, { remove: "remove" });
-    chrome.storage.local.set({ emojis: predefinedemojis }, function () {});
+    chrome.storage.local.set({ emojis: stockEmojis }, function () {});
     window.close();
   });
 
@@ -103,7 +103,6 @@ function getButtonTextFromStorage() {
       chrome.storage.local.get({ name: [] }, function (result) {
         console.log(result.name);
         resolve(result.name);
-        console.log(buttonname);
       });
     }, 0);
   });
@@ -115,7 +114,6 @@ function getButtonEmojiFromStorage() {
       chrome.storage.local.get({ value: [] }, function (result) {
         console.log(result.value);
         resolve(result.value);
-        console.log(buttonname);
       });
     }, 0);
   });
@@ -137,12 +135,12 @@ async function updatePopup() {
   buttonEmoji = await getButtonEmojiFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
-  if (buttonText.length == predefinedemojis.length) {
+  if (buttonText.length == stockEmojis.length) {
     document.getElementById("add").disabled = true;
   }
 
   if (changeableEmojis.length == 0 && buttonText.length == 0) {
-    emojis = predefinedemojis;
+    changeableEmojis = stockEmojis;
   } /*else{
       if(emojis.length==0){
         emojis=predefinedemojis.filter(emoji => !buttonvalue.includes(emoji));
