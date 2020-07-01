@@ -18,7 +18,6 @@
   },
   "content_scripts": [
     {
-      "css": ["style.css"],
       "matches": ["https://*.tinder.com/*"],
       "js": ["content.js"]
     }
