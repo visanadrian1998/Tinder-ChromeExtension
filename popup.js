@@ -76,14 +76,14 @@ const selectElements = () => {
       document.getElementById("addMessage").disabled = false;
       const message = messageText.value;
       const emoji = emojiSelector.value;
-      console.log(message);
-      console.log(emoji);
       buttonText.push(message);
       buttonEmoji.push(emoji);
       changeableEmojis = changeableEmojis.filter(
         (emoji) => emoji != emojiSelector.value
       );
-      chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
+      chrome.storage.local.set({ emojis: changeableEmojis }, function () {
+        console.log("emojis are set to:", changeableEmojis);
+      });
       chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
       setMessageButton.disabled = true;
       messageText.readOnly = true;
