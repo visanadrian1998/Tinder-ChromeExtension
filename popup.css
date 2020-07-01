@@ -6,10 +6,14 @@
 h1 {
   color: #f44336;
   font-family: SEGOE UI;
+  text-align: center;
 }
 .ImageWrapperCss {
   text-align: center;
   margin: 0 0 20px;
+}
+.ButtonWrapperCss {
+  align-items: center;
 }
 button {
   border: 1px solid #2196f3;
