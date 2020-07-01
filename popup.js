@@ -47,9 +47,9 @@ const selectElements = () => {
     messageText.type = "text";
 
     const emojiSelector = document.createElement("select");
-    for (i = 0; i < emojis.length; i++) {
+    for (i = 0; i < changeableEmojis.length; i++) {
       const option = document.createElement("option");
-      option.innerHTML = emojis[i];
+      option.innerHTML = changeableEmojis[i];
       emojiSelector.add(option);
     }
 
