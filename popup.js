@@ -84,17 +84,13 @@ const selectElements = () => {
       chrome.storage.local.set({ emojis: changeableEmojis }, function () {
         console.log("emojis are set to:", changeableEmojis);
       });
-      chrome.tabs.sendMessage(
-        tabId,
-        { addmessage: message, addemoji: emoji },
-        function () {}
-      );
+      chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
       setMessageButton.disabled = true;
       messageText.readOnly = true;
       // messagebtn.classList.add("disappear");
-      emojiselector.disabled = true;
-      if (emojis.length == 0) {
-        document.getElementById("add").disabled = true;
+      emojiSelector.disabled = true;
+      if (changeableEmojis.length == 0) {
+        document.getElementById("addMessage").disabled = true;
       }
     });
   });
