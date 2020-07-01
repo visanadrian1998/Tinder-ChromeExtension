@@ -3,9 +3,11 @@ const stockEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
 let changeableEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
 
 const runApp = (tab) => {
+  console.log("a pornit");
   //CHECK IF TINDER PAGE IS OPEN IN TAB
   if (tab.url.includes("tinder.com")) {
     tabId = tab.id;
+
     //selectElements();
     //updatePopup();
   } else {
