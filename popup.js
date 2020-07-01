@@ -46,6 +46,9 @@ const selectElements = () => {
     const messageText = document.createElement("input");
     messageText.type = "text";
 
+    messageContainer.appendChild(messageText);
+    addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
+
     const emojiSelector = document.createElement("select");
     for (i = 0; i < changeableEmojis.length; i++) {
       const option = document.createElement("option");
@@ -65,8 +68,5 @@ const selectElements = () => {
     messageText.addEventListener("keydown", function () {
       messagebtn.disabled = false;
     });
-
-    messageContainer.appendChild(messageText);
-    addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
   });
 };
