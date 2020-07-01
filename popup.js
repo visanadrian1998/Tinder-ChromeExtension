@@ -7,7 +7,7 @@ const runApp = (tab) => {
   if (tab.url.includes("tinder.com")) {
     const tabId = tab.id;
     selectElements();
-    //updatePopup();
+    updatePopup();
   } else {
     const addAndRemoveButtons = document.getElementById("addAndRemoveButtons");
     const notOnTinder = document.getElementById("notOnTinder");
