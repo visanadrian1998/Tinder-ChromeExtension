@@ -16,6 +16,7 @@ const runApp = (tab) => {
     addAndRemoveButtons.style.display = "none";
     notOnTinder.style.display = "inline";
 
+    //CLICKING ON LINK -> CREATE NEW TAB THAT TAKES YOU TO TINDER.COM
     const tinderLink = document.getElementById("openTinder");
     tinderLink.addEventListener("click", function () {
       chrome.tabs.create({ url: "https://tinder.com", active: true });
@@ -32,8 +33,9 @@ window.addEventListener("DOMContentLoaded", () =>
 
 const selectElements = () => {
   addMessageButton = document.getElementById("addMessage");
-  const removeAllMessagesButton = document.getElementById("removeAllButtons");
+  removeAllMessagesButton = document.getElementById("removeAllButtons");
 
+  //SEND MESSAGE TO CONTENT AND IN LOCAL STORAGE SET EMOJIS TO THE STOCK ONES
   removeAllMessagesButton.addEventListener("click", function () {
     chrome.tabs.sendMessage(tabId, { remove: "remove" });
     chrome.storage.local.set({ emojis: stockEmojis }, function () {});
@@ -42,14 +44,20 @@ const selectElements = () => {
 
   addMessageButton.addEventListener("click", function () {
     const messageContainer = document.createElement("div");
+
+    //CREATE TEXT INPUT
     messageContainer.id = "messageContainer";
     const messageText = document.createElement("input");
     messageText.id = "textInput";
     messageText.type = "text";
 
+    //ADD TEXT INPUT TO CONTAINER
     messageContainer.appendChild(messageText);
+
+    //ADD CONTAINER IN FRONT OF ADD&REMOVE BUTTONS
     addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
 
+    //CREATE EMOJI SELECTOR AND LOAD THE OPTIONS WITH OUR EMOJIS
     const emojiSelector = document.createElement("select");
     emojiSelector.id = "emojiSelector";
     for (i = 0; i < changeableEmojis.length; i++) {
@@ -58,38 +66,54 @@ const selectElements = () => {
       emojiSelector.add(option);
     }
 
+    //INSERT EMOJI SELECTOR AFTER TEXT INPUT
     messageText.insertAdjacentElement("afterend", emojiSelector);
 
+    //CREATE "SET" BUTTON
     const setMessageButton = document.createElement("input");
+    //ADDMESSAGEBUTTON IS DISABLED UNTIL WE SET THE CURRENT MESSAGE
     addMessageButton.disabled = true;
+    //SETMESSAGEBUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
     setMessageButton.disabled = true;
     setMessageButton.type = "button";
     setMessageButton.value = "SET!";
     setMessageButton.className = "addbutton";
     setMessageButton.id = "setMessageButton";
+
+    //INSERT SET BUTTON AFTER EMOJI SELECTOR
     emojiSelector.insertAdjacentElement("afterend", setMessageButton);
+    //IF TEXT INPUT CONTAINS SOMETHING -> SET BUTTON ISN'T DISABLED;IF IT IS EMPTY->DISABLED BUTTON
     messageText.addEventListener("keyup", function () {
       messageText.value.length > 0
         ? (setMessageButton.disabled = false)
         : (setMessageButton.disabled = true);
     });
+
     setMessageButton.addEventListener("click", function () {
+      //ENABLE THE ADD MESSAGE BUTTON WHEN WE SET THE CURRENT MESSAGE
       document.getElementById("addMessage").disabled = false;
+
       const message = messageText.value;
       const emoji = emojiSelector.value;
       buttonText.push(message);
       buttonEmoji.push(emoji);
+
+      //REMOVE THE SELECTED EMOJI FROM THE ARRAY OF EMOJIS AND SET THE NEW ARRAY IN LOCAL STORAGE
       changeableEmojis = changeableEmojis.filter(
         (emoji) => emoji != emojiSelector.value
       );
-      chrome.storage.local.set({ emojis: changeableEmojis }, function () {
-        console.log("emojis are set to:", changeableEmojis);
-      });
+      chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
+
+      //SEND THE MESSAGE AND THE EMOJI TO CONTENT
       chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
-      setMessageButton.disabled = true;
+
+      //TEXT INPUT AND EMOJI SELECTOR DISABLED;SET BUTTON DISSAPEARS
       messageText.readOnly = true;
-      setMessageButton.classList.add("disappear");
+      setMessageButton.style.display = "none";
+      //setMessageButton.classList.add("disappear");
       emojiSelector.disabled = true;
+
+      //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
       if (changeableEmojis.length == 0) {
         document.getElementById("addMessage").disabled = true;
       }
@@ -101,7 +125,6 @@ function getButtonTextFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ name: [] }, function (result) {
-        console.log(result.name);
         resolve(result.name);
       });
     }, 0);
@@ -112,7 +135,6 @@ function getButtonEmojiFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ value: [] }, function (result) {
-        console.log(result.value);
         resolve(result.value);
       });
     }, 0);
@@ -123,7 +145,6 @@ function getEmojisFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ emojis: [] }, function (result) {
-        console.log(result.emojis);
         resolve(result.emojis);
       });
     }, 0);
@@ -132,7 +153,6 @@ function getEmojisFromStorage() {
 
 async function updatePopup() {
   buttonText = await getButtonTextFromStorage();
-  console.log(buttonText);
   buttonEmoji = await getButtonEmojiFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
@@ -142,11 +162,7 @@ async function updatePopup() {
 
   if (changeableEmojis.length == 0 && buttonText.length == 0) {
     changeableEmojis = stockEmojis;
-  } /*else{
-      if(emojis.length==0){
-        emojis=predefinedemojis.filter(emoji => !buttonvalue.includes(emoji));
-      }
-    }*/
+  }
 
   for (let i = 0; i < buttonText.length; i++) {
     const messageContainer = document.createElement("div");
@@ -176,23 +192,12 @@ async function updatePopup() {
     emojiSelector.insertAdjacentElement("afterend", deleteFromPopup);
 
     deleteFromPopup.onclick = function () {
-      //console.log(buttonname);
-      //if(emojis.length>=predefinedemojis.length){
       changeableEmojis.push(buttonEmoji[i]);
-      //emojis=emojis.filter(emoji => emoji=buttonvalue[i]);
-      //}
       buttonText = buttonText.filter((name) => name != buttonText[i]);
       buttonEmoji = buttonEmoji.filter((value) => value != buttonEmoji[i]);
-      //console.log(buttonname);
-      chrome.storage.local.set({ name: buttonText }, function () {
-        console.log("name is set to:", buttonText);
-      });
-      chrome.storage.local.set({ value: buttonEmoji }, function () {
-        console.log("value is set to:", buttonEmoji);
-      });
-      chrome.storage.local.set({ emojis: changeableEmojis }, function () {
-        console.log("value is set to:", changeableEmojis);
-      });
+      chrome.storage.local.set({ name: buttonText }, function () {});
+      chrome.storage.local.set({ value: buttonEmoji }, function () {});
+      chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
       chrome.tabs.sendMessage(tabId, { removebutton: "remove" });
 
       window.close();
