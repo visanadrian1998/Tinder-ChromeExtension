@@ -68,6 +68,15 @@ button:disabled {
   text-align: center;
   font-weight: bold;
 }
+#setMessageButton:hover {
+  border: 1px solid #03a9f4;
+  background-color: rgba(0, 0, 0, 0);
+  color: #03a9f4;
+}
+#setMessageButton:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
 #emojiSelector {
   height: 22px;
 }
