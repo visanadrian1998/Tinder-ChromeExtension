@@ -51,7 +51,6 @@ const selectElements = () => {
     addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
 
     const emojiSelector = document.createElement("select");
-    emojiSelector.id = "emojiSelector";
     for (i = 0; i < changeableEmojis.length; i++) {
       const option = document.createElement("option");
       option.innerHTML = changeableEmojis[i];
@@ -66,6 +65,7 @@ const selectElements = () => {
     setMessageButton.type = "button";
     setMessageButton.value = "SET!";
     setMessageButton.className = "addbutton";
+    setMessageButton.id = "setMessageButton";
     emojiSelector.insertAdjacentElement("afterend", setMessageButton);
     messageText.addEventListener("keydown", function () {
       messageText.value.length > 0 ? (setMessageButton.disabled = false) : "";
