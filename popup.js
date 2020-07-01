@@ -69,9 +69,10 @@ const selectElements = () => {
     setMessageButton.id = "setMessageButton";
     emojiSelector.insertAdjacentElement("afterend", setMessageButton);
     messageText.addEventListener("keyup", function () {
-      messageText.value.length > 0 ? (setMessageButton.disabled = false) : "";
+      messageText.value.length > 0 && messageText.value !== ""
+        ? (setMessageButton.disabled = false)
+        : "";
     });
-
     setMessageButton.addEventListener("click", function () {
       document.getElementById("addMessage").disabled = false;
       const message = messageText.value;
