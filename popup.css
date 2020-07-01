@@ -11,13 +11,15 @@ h1 {
   margin: 0 0 20px;
 }
 img {
-  height: 50%;
-  width: 50%;
+  height: 30%;
+  width: 30%;
 }
 .ButtonWrapperCss {
   align-items: center;
 }
-
+.notOnTinder {
+  margin: 0 0 20px;
+}
 button {
   border: 1px solid #2196f3;
   background: #2196f3;
