@@ -133,8 +133,8 @@ function getEmojisFromStorage() {
 }
 
 async function updatePopup() {
-  buttonText = await getButtonsNamesFromStorage();
-  buttonEmoji = await getButtonsValuesFromStorage();
+  buttonText = await getButtonTextFromStorage();
+  buttonEmoji = await getButtonEmojiFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
   if (buttonText.length == predefinedemojis.length) {
