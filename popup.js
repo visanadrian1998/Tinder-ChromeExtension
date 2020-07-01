@@ -155,8 +155,7 @@ async function updatePopup() {
     messageText.type = "text";
     messageText.value = buttonText[i];
     messageText.readOnly = true;
-    messageText.id = "storagetext";
-    console.log(messageText);
+    messageText.id = "textInput";
     messageContainer.appendChild(messageText);
     addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
 
