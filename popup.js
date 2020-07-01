@@ -6,7 +6,7 @@ const runApp = (tab) => {
   //CHECK IF TINDER PAGE IS OPEN IN TAB
   if (tab.url.includes("tinder.com")) {
     const tabId = tab.id;
-    //selectElements();
+    selectElements();
     //updatePopup();
   } else {
     const addAndRemoveButtons = document.getElementById("addAndRemoveButtons");
