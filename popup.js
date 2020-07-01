@@ -131,6 +131,7 @@ function getEmojisFromStorage() {
 
 async function updatePopup() {
   buttonText = await getButtonTextFromStorage();
+  console.log(buttonText);
   buttonEmoji = await getButtonEmojiFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
