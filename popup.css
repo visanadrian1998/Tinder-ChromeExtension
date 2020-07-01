@@ -49,11 +49,17 @@ button:disabled {
   font-style: italic;
   font-size: 16px;
 }
-
+#messageContainer {
+  display: table;
+}
 #textInput {
+  display: table-cell;
+  vertical-align: middle;
   margin: 0 5px 0;
 }
 #setMessageButton {
+  display: table-cell;
+  vertical-align: middle;
   margin: 0 5px 0;
   border: 1px solid #2196f3;
   background-color: #2196f3;
@@ -78,5 +84,7 @@ button:disabled {
   opacity: 0.5;
 }
 #emojiSelector {
+  display: table-cell;
+  vertical-align: middle;
   height: 22px;
 }

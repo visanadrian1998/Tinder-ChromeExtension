@@ -42,7 +42,7 @@ const selectElements = () => {
 
   addMessageButton.addEventListener("click", function () {
     const messageContainer = document.createElement("div");
-
+    messageContainer.id = "messageContainer";
     const messageText = document.createElement("input");
     messageText.id = "textInput";
     messageText.type = "text";
