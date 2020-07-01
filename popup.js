@@ -23,6 +23,8 @@ window.addEventListener("DOMContentLoaded", () =>
   )
 );
 
-notOnTinder.onClick = () => {
-  chrome.tabs.create({ url: "https://tinder.com", active: true });
-};
+if (notOnTinder) {
+  notOnTinder.onClick = () => {
+    chrome.tabs.create({ url: "https://tinder.com", active: true });
+  };
+}
