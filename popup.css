@@ -56,3 +56,6 @@ button:disabled {
 #setMessageButton {
   margin: 0 5px 0;
 }
+#emojiSelector {
+  padding-top: 3px;
+}
