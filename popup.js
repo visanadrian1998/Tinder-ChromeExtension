@@ -141,22 +141,24 @@ function getButtonEmojiFromStorage() {
   });
 }
 
+//GET THE REMAINING AVAILABLE EMOJIS FROM STORAGE
 function getEmojisFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ emojis: [] }, function (result) {
         resolve(result.emojis);
-        console.log(result.emojis);
       });
     }, 0);
   });
 }
 
 async function updatePopup() {
+  //FETCH THE MESSAGES AND EMOJIS FROM STORAGE
   buttonText = await getButtonTextFromStorage();
   buttonEmoji = await getButtonEmojiFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
+  //IF THE NUMBER OF MESSAGES EQUALS THE NUMBER OF ALL EMOJIS -> WE HAVE USED ALL EMOJIS SO WE CAN'T ADD NEW MESSAGES
   if (buttonText.length == stockEmojis.length) {
     document.getElementById("addMessage").disabled = true;
   }
@@ -165,6 +167,7 @@ async function updatePopup() {
     changeableEmojis = stockEmojis;
   }
 
+  //FOR EVERY MESSAGE WE CREATE A CONTAINER WITH:THE MESSAGE, THE EMOJI AND A DELETE BUTTON
   for (let i = 0; i < buttonText.length; i++) {
     const messageContainer = document.createElement("div");
     messageContainer.id = "messageContainer";
@@ -192,13 +195,21 @@ async function updatePopup() {
     deleteFromPopup.id = "deletefrompopup";
     emojiSelector.insertAdjacentElement("afterend", deleteFromPopup);
 
+    //WHEN WE DELETE A MESSAGE:
     deleteFromPopup.onclick = function () {
+      //ADD THE EMOJI BACK TO THE ARRAY OF AVAILABLE EMOJIS
       changeableEmojis.push(buttonEmoji[i]);
+
+      //REMOVE THE MESSAGE FROM THE ARRAY OF MESSAGES
       buttonText = buttonText.filter((name) => name != buttonText[i]);
+      //REMOVE THE EMOJI FROM THE ARRAY OF USED EMOJIS
       buttonEmoji = buttonEmoji.filter((value) => value != buttonEmoji[i]);
+      //UPDATE THE LOCAL STORAG
       chrome.storage.local.set({ name: buttonText }, function () {});
       chrome.storage.local.set({ value: buttonEmoji }, function () {});
       chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
+
+      //SEND REMOVE MESSAGE TO CONTENT
       chrome.tabs.sendMessage(tabId, { removebutton: "remove" });
 
       window.close();
