@@ -49,3 +49,7 @@ button:disabled {
   font-style: italic;
   font-size: 16px;
 }
+
+#textInput {
+  padding: 0 10px 0;
+}

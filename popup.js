@@ -44,6 +44,7 @@ const selectElements = () => {
     const messageContainer = document.createElement("div");
 
     const messageText = document.createElement("input");
+    messageText.id = "textInput";
     messageText.type = "text";
 
     messageContainer.appendChild(messageText);
