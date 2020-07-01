@@ -9,8 +9,8 @@ const runApp = (tab) => {
     selectElements();
     updatePopup();
   } else {
-    addAndRemoveButtons = document.getElementById("messageList");
-    notOnTinder = document.getElementById("not-tinder");
+    addAndRemoveButtons = document.getElementById("addAndRemoveButtons");
+    notOnTinder = document.getElementById("notOnTinder");
     addAndRemoveButtons.style.display = "none";
     notOnTinder.style.display = "inline";
     notOnTinder.onClick = () => {
