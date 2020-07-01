@@ -1,19 +1,23 @@
 .PopupWrapperCss {
   min-width: 400px;
   background-image: linear-gradient(200deg, #ffffff 0%, #84fab0 100%);
+  text-align: center;
 }
 h1 {
   color: #f44336;
   font-family: SEGOE UI;
-  text-align: center;
 }
 .ImageWrapperCss {
-  text-align: center;
   margin: 0 0 20px;
+}
+img {
+  height: 50%;
+  width: 50%;
 }
 .ButtonWrapperCss {
   align-items: center;
 }
+
 button {
   border: 1px solid #2196f3;
   background: #2196f3;
