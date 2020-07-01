@@ -55,7 +55,19 @@ button:disabled {
 }
 #setMessageButton {
   margin: 0 5px 0;
+  border: 1px solid #2196f3;
+  background-color: #2196f3;
+  color: white;
+  width: 115px;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.4s ease;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  text-align: center;
+  font-weight: bold;
 }
 #emojiSelector {
-  margin-top: 3px;
+  height: 22px;
 }
