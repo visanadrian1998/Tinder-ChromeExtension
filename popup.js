@@ -3,11 +3,9 @@ const stockEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
 let changeableEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
 
 const runApp = (tab) => {
-  console.log("a pornit");
   //CHECK IF TINDER PAGE IS OPEN IN TAB
   if (tab.url.includes("tinder.com")) {
     tabId = tab.id;
-
     //selectElements();
     //updatePopup();
   } else {
@@ -16,9 +14,10 @@ const runApp = (tab) => {
     addAndRemoveButtons.style.display = "none";
     notOnTinder.style.display = "inline";
     tinderLink = document.getElementById("openTinder");
-    console.log("link", tinderLink);
+    //tinderLink.addEventListener("click", function () {
+    //chrome.tabs.create({ url: "https://tinder.com", active: true });
+    //});
     tinderLink.onClick = () => {
-      console.log("click click");
       chrome.tabs.create({ url: "https://tinder.com", active: true });
     };
   }
