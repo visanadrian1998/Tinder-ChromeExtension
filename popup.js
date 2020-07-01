@@ -161,8 +161,9 @@ async function updatePopup() {
 
     const emojiSelector = document.createElement("select");
     //emojiSelector.type = "button";
-    emojiSelector.disabled = true;
-    emojiSelector.value = buttonEmoji[i];
+    const option = document.createElement("option");
+    option.innerHTML = buttonEmoji[i];
+    emojiSelector.add(option);
     emojiSelector.id = "emoji";
     messageText.insertAdjacentElement("afterend", emojiSelector);
 
