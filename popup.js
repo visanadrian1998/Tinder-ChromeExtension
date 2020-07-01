@@ -71,5 +71,28 @@ const selectElements = () => {
     messageText.addEventListener("keydown", function () {
       messageText.value.length > 0 ? (setMessageButton.disabled = false) : "";
     });
+
+    setMessageButton.addEventListener("click", function () {
+      document.getElementById("addMessage").disabled = false;
+      const messageSelected = messagetext.value;
+      const emojiSelected = emojiselector.value;
+      buttonText.push(messageSelected);
+      buttonEmoji.push(emojiSelected);
+      changeableEmojis = changeableEmojis.filter(
+        (emoji) => emoji != emojiSelector.value
+      );
+      chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
+      chrome.tabs.sendMessage(tabId, {
+        addmessage: messageSelected,
+        addemoji: emojiSelected,
+      });
+      setMessageButton.disabled = true;
+      messageText.readOnly = true;
+      // messagebtn.classList.add("disappear");
+      emojiselector.disabled = true;
+      if (emojis.length == 0) {
+        document.getElementById("add").disabled = true;
+      }
+    });
   });
 };
