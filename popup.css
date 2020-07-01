@@ -12,6 +12,7 @@ h1 {
   font-family: SEGOE UI;
 }
 .ImageWrapperCss {
+  padding-top: 15px;
   margin: 0 0 20px;
 }
 img {
@@ -20,6 +21,7 @@ img {
 }
 .ButtonWrapperCss {
   align-items: center;
+  margin: 0 0 20px;
 }
 .addAndRemoveButtons {
   text-align: center;
