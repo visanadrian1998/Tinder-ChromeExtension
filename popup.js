@@ -74,18 +74,15 @@ const selectElements = () => {
 
     setMessageButton.addEventListener("click", function () {
       document.getElementById("addMessage").disabled = false;
-      const messageSelected = messageText.value;
-      const emojiSelected = emojiSelector.value;
-      buttonText.push(messageSelected);
-      buttonEmoji.push(emojiSelected);
+      const message = messageText.value;
+      const emoji = emojiSelector.value;
+      buttonText.push(message);
+      buttonEmoji.push(emoji);
       changeableEmojis = changeableEmojis.filter(
         (emoji) => emoji != emojiSelector.value
       );
       chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
-      chrome.tabs.sendMessage(tabId, {
-        addmessage: messageSelected,
-        addemoji: emojiSelected,
-      });
+      chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
       setMessageButton.disabled = true;
       messageText.readOnly = true;
       // messagebtn.classList.add("disappear");
