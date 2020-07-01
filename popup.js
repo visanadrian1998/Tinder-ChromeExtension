@@ -5,7 +5,7 @@ let changeableEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
 const runApp = (tab) => {
   //CHECK IF TINDER PAGE IS OPEN IN TAB
   if (tab.url.includes("tinder.com")) {
-    const tabId = tab.id;
+    tabId = tab.id;
     selectElements();
     updatePopup();
   } else {
