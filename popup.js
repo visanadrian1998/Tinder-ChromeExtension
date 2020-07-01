@@ -24,6 +24,7 @@ const runApp = (tab) => {
   }
 };
 
+//WHEN CONTENT LOADED -> RUN EXTENSION
 window.addEventListener("DOMContentLoaded", () =>
   chrome.tabs.query(
     { active: true, currentWindow: true },
@@ -44,9 +45,9 @@ const selectElements = () => {
 
   addMessageButton.addEventListener("click", function () {
     const messageContainer = document.createElement("div");
+    messageContainer.id = "messageContainer";
 
     //CREATE TEXT INPUT
-    messageContainer.id = "messageContainer";
     const messageText = document.createElement("input");
     messageText.id = "textInput";
     messageText.type = "text";
@@ -169,19 +170,24 @@ async function updatePopup() {
 
   //FOR EVERY MESSAGE WE CREATE A CONTAINER WITH:THE MESSAGE, THE EMOJI AND A DELETE BUTTON
   for (let i = 0; i < buttonText.length; i++) {
+    //CREATE CONTAINER
     const messageContainer = document.createElement("div");
     messageContainer.id = "messageContainer";
 
+    //CREATE TEXT INPUT AND MAKE IT READ-ONLY
     const messageText = document.createElement("input");
     messageText.type = "text";
     messageText.value = buttonText[i];
     messageText.readOnly = true;
     messageText.id = "textInput";
+
+    //ADD TEXT INPUT TO CONTAINER
     messageContainer.appendChild(messageText);
+    //ADD CONTAINER IN FRONT OF ADD&REMOVE BUTTONS
     addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
 
+    //CREATE EMOJI SELECTOR ADD EMOJI AND MAKE IT DISABLED
     const emojiSelector = document.createElement("select");
-    //emojiSelector.type = "button";
     const option = document.createElement("option");
     option.innerHTML = buttonEmoji[i];
     emojiSelector.add(option);
@@ -189,7 +195,8 @@ async function updatePopup() {
     emojiSelector.disabled = true;
     messageText.insertAdjacentElement("afterend", emojiSelector);
 
-    var deleteFromPopup = document.createElement("input");
+    //CREATE DELETE BUTTON
+    const deleteFromPopup = document.createElement("input");
     deleteFromPopup.type = "button";
     deleteFromPopup.value = "×";
     deleteFromPopup.id = "deletefrompopup";
@@ -204,7 +211,7 @@ async function updatePopup() {
       buttonText = buttonText.filter((name) => name != buttonText[i]);
       //REMOVE THE EMOJI FROM THE ARRAY OF USED EMOJIS
       buttonEmoji = buttonEmoji.filter((value) => value != buttonEmoji[i]);
-      //UPDATE THE LOCAL STORAG
+      //UPDATE THE LOCAL STORAGE
       chrome.storage.local.set({ name: buttonText }, function () {});
       chrome.storage.local.set({ value: buttonEmoji }, function () {});
       chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
