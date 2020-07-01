@@ -11,7 +11,7 @@ const runApp = (tab) => {
   } else {
     addAndRemoveButtons = document.getElementById("messageList");
     notOnTinder = document.getElementById("not-tinder");
-    messageList.style.display = "none";
+    addAndRemoveButtons.style.display = "none";
     notOnTinder.style.display = "inline";
     notOnTinder.onClick = () => {
       chrome.tabs.create({ url: "https://tinder.com", active: true });
