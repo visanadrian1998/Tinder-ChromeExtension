@@ -32,6 +32,40 @@ window.addEventListener("DOMContentLoaded", () =>
   )
 );
 
+const createDeleteButton = (
+  elementToInsertAfter,
+  selectedEmoji,
+  selectedMessage,
+  messagesArray,
+  emojisArray
+) => {
+  const deleteFromPopup = document.createElement("input");
+  deleteFromPopup.type = "button";
+  deleteFromPopup.value = "×";
+  deleteFromPopup.id = "deletefrompopup";
+  elementToInsertAfter.insertAdjacentElement("afterend", deleteFromPopup);
+
+  //WHEN WE DELETE A MESSAGE:
+  deleteFromPopup.onclick = function () {
+    //ADD THE EMOJI BACK TO THE ARRAY OF AVAILABLE EMOJIS
+    changeableEmojis.push(selectedEmoji);
+
+    //REMOVE THE MESSAGE FROM THE ARRAY OF MESSAGES
+    messagesArray = messagesArray.filter((name) => name != selectedMessage);
+    //REMOVE THE EMOJI FROM THE ARRAY OF USED EMOJIS
+    emojisArray = emojisArray.filter((value) => value != selectedEmoji);
+    //UPDATE THE LOCAL STORAGE
+    chrome.storage.local.set({ name: messagesArray }, function () {});
+    chrome.storage.local.set({ value: emojisArray }, function () {});
+    chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
+
+    //SEND REMOVE MESSAGE TO CONTENT
+    chrome.tabs.sendMessage(tabId, { removeButton: "remove" });
+
+    window.close();
+  };
+};
+
 const selectElements = () => {
   addMessageButton = document.getElementById("addMessage");
   removeAllMessagesButton = document.getElementById("removeAllButtons");
@@ -112,6 +146,13 @@ const selectElements = () => {
       setMessageButton.style.display = "none";
       emojiSelector.disabled = true;
 
+      createDeleteButton(
+        emojiSelector,
+        emoji,
+        message,
+        buttonText,
+        buttonEmoji
+      );
       //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
       if (changeableEmojis.length == 0) {
         document.getElementById("addMessage").disabled = true;
@@ -195,31 +236,12 @@ async function updatePopup() {
     emojiSelector.disabled = true;
     messageText.insertAdjacentElement("afterend", emojiSelector);
 
-    //CREATE DELETE BUTTON
-    const deleteFromPopup = document.createElement("input");
-    deleteFromPopup.type = "button";
-    deleteFromPopup.value = "×";
-    deleteFromPopup.id = "deletefrompopup";
-    emojiSelector.insertAdjacentElement("afterend", deleteFromPopup);
-
-    //WHEN WE DELETE A MESSAGE:
-    deleteFromPopup.onclick = function () {
-      //ADD THE EMOJI BACK TO THE ARRAY OF AVAILABLE EMOJIS
-      changeableEmojis.push(buttonEmoji[i]);
-
-      //REMOVE THE MESSAGE FROM THE ARRAY OF MESSAGES
-      buttonText = buttonText.filter((name) => name != buttonText[i]);
-      //REMOVE THE EMOJI FROM THE ARRAY OF USED EMOJIS
-      buttonEmoji = buttonEmoji.filter((value) => value != buttonEmoji[i]);
-      //UPDATE THE LOCAL STORAGE
-      chrome.storage.local.set({ name: buttonText }, function () {});
-      chrome.storage.local.set({ value: buttonEmoji }, function () {});
-      chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
-
-      //SEND REMOVE MESSAGE TO CONTENT
-      chrome.tabs.sendMessage(tabId, { removeButton: "remove" });
-
-      window.close();
-    };
+    createDeleteButton(
+      emojiSelector,
+      buttonEmoji[i],
+      buttonText[i],
+      buttonText,
+      buttonEmoji
+    );
   }
 }
