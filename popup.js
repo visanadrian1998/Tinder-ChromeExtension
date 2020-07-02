@@ -32,6 +32,7 @@ window.addEventListener("DOMContentLoaded", () =>
   )
 );
 
+//ADD THE TEXT INPUT,EMOJI SELECTOR AND SET BUTTON TO CONTAINER
 const fillContainerWithElements = (
   container,
   textInput,
