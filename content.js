@@ -58,9 +58,11 @@ const runApp = () => {
     ) {
       //IT MEANS WE HAVE EXITED THE CONVERSATION SO WE ENABLE ALL THE MESSAGE BUTTONS
       conversation_state.isInConversation = false;
-      for (let i = 0; i < addedButtons.length; i++) {
-        addedButtons[i].disabled = false;
-      }
+
+      // UNCOMMENT IF YOU WANT TO SEND THE MESSAGES ON CLICK->OTHERWISE DISABLING/ENABLING THE BUTTONS DOESNT MAKE SENSE
+      // for (let i = 0; i < addedButtons.length; i++) {
+      //   addedButtons[i].disabled = false;
+      // }
     }
 
     //IF THE URL INCLUDES MESSAGES & WE WEREN'T IN CONVERSATION BEFORE CLICK ->
@@ -95,26 +97,38 @@ function sendMessage(message) {
   const textarea = document.getElementById("chat-text-area");
   textarea.value = message.name;
   textarea.dispatchEvent(event);
-  const submit = document.getElementsByClassName(
-    "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
-  )[0];
-  submit.click();
+
+  // UNCOMMENT IF YOU WANT THE MESSAGE TO BE SENT ON BUTTON CLICK
+  // const submit = document.getElementsByClassName(
+  //   "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
+  // )[0];
+  // submit.click();
 
   //DISABLE THE BUTTON SO WE DON'T SEND THE SAME MESSAGE TWICE
-  message.disabled = true;
+  // UNCOMMENT IF YOU WANT TO SEND THE MESSAGES ON CLICK->OTHERWISE DISABLING/ENABLING THE BUTTONS DOESNT MAKE SENSE
+  //message.disabled = true;
 }
 
 function insertAddedMessages() {
   //FOR EVERY BUTTON WE SELECT THE CHATBOX AND WE INSERT THE BUTTON TO BE DISPLAYED
+  const chatbox = document.getElementsByClassName(
+    "D(f) W(100%) BdT Bdtc($c-divider) Bgc(#fff) Pos(r)"
+  )[0];
   for (let i = 0; i < addedButtons.length; i++) {
     try {
-      const chatbox = document.getElementsByClassName(
-        "D(f) W(100%) BdT Bdtc($c-divider) Bgc(#fff) Pos(r)"
-      )[0];
       chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
 
       addedButtons[i].style.left = `${40 * i}px`;
 
+      // UNCOMMENT IF YOU WANT TO PREVIEW MESSAGE ON BUTTON HOVER
+      // addedButtons[i].onmouseover = function () {
+      //   const textarea = document.getElementById("chat-text-area");
+      //   textarea.value = addedButtons[i].name;
+      // };
+      // addedButtons[i].onmouseout = function () {
+      //   const textarea = document.getElementById("chat-text-area");
+      //   textarea.value = "";
+      // };
       addedButtons[i].onclick = function () {
         sendMessage(addedButtons[i]);
       };
