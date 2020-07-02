@@ -38,7 +38,8 @@ const fillContainerWithElements = (
   textInput,
   addMessageButton,
   emojiSelector,
-  setButton
+  setButton,
+  noSetButton
 ) => {
   //ADD TEXT INPUT TO CONTAINER
   container.appendChild(textInput);
@@ -49,13 +50,27 @@ const fillContainerWithElements = (
   //INSERT EMOJI SELECTOR AFTER TEXT INPUT
   textInput.insertAdjacentElement("afterend", emojiSelector);
 
-  //INSERT SET BUTTON AFTER EMOJI SELECTOR
-  emojiSelector.insertAdjacentElement("afterend", setButton);
+  if (!noSetButton) {
+    //INSERT SET BUTTON AFTER EMOJI SELECTOR
+    emojiSelector.insertAdjacentElement("afterend", setButton);
+  }
 };
 
-const messageTextLogic = (messageText, messageContainer, setMessageButton) => {
+const messageTextLogic = (
+  messageText,
+  messageContainer,
+  setMessageButton,
+  editable,
+  value
+) => {
   messageText.rows = 1;
   //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
+  messageText.id = "textInput";
+  messageText.type = "text";
+  if (!editable) {
+    messageText.readOnly = true;
+    messageText.value = value;
+  }
   messageText.onclick = () => {
     if (messageText.readOnly) {
       messageText.rows = 5;
@@ -66,23 +81,30 @@ const messageTextLogic = (messageText, messageContainer, setMessageButton) => {
   messageText.onmouseout = () => {
     messageText.readOnly ? (messageText.rows = 1) : "";
   };
-  messageText.id = "textInput";
-  messageText.type = "text";
   //IF TEXT INPUT CONTAINS SOMETHING -> SET BUTTON ISN'T DISABLED;IF IT IS EMPTY->DISABLED BUTTON
-  messageText.addEventListener("keyup", function () {
-    messageText.value.length > 0
-      ? (setMessageButton.disabled = false)
-      : (setMessageButton.disabled = true);
-  });
+  if (editable) {
+    messageText.addEventListener("keyup", function () {
+      messageText.value.length > 0
+        ? (setMessageButton.disabled = false)
+        : (setMessageButton.disabled = true);
+    });
+  }
 };
 
 //EMOJI SELECTOR:LOAD THE OPTIONS WITH OUR EMOJIS
-const emojiSelectorLogic = (emojiSelector) => {
+const emojiSelectorLogic = (emojiSelector, editable, value) => {
   //CREATE EMOJI SELECTOR AND LOAD THE OPTIONS WITH OUR EMOJIS
   emojiSelector.id = "emojiSelector";
-  for (i = 0; i < changeableEmojis.length; i++) {
+  if (editable) {
+    for (i = 0; i < changeableEmojis.length; i++) {
+      const option = document.createElement("option");
+      option.innerHTML = changeableEmojis[i];
+      emojiSelector.add(option);
+    }
+  } else {
+    emojiSelector.disabled = true;
     const option = document.createElement("option");
-    option.innerHTML = changeableEmojis[i];
+    option.innerHTML = value;
     emojiSelector.add(option);
   }
 };
@@ -195,15 +217,16 @@ const elementsCreationAndLogic = () => {
     //CREATE "SET" BUTTON
     const setMessageButton = document.createElement("input");
 
-    messageTextLogic(messageText, messageContainer, setMessageButton);
-    emojiSelectorLogic(emojiSelector);
+    messageTextLogic(messageText, messageContainer, setMessageButton, true, "");
+    emojiSelectorLogic(emojiSelector, true, "");
 
     fillContainerWithElements(
       messageContainer,
       messageText,
       addMessageButton,
       emojiSelector,
-      setMessageButton
+      setMessageButton,
+      false
     );
 
     setMessageButtonLogic(
@@ -269,38 +292,25 @@ async function updatePopup() {
     const messageContainer = document.createElement("div");
     messageContainer.id = "messageContainer";
 
-    //CREATE TEXT INPUT AND MAKE IT READ-ONLY
     const messageText = document.createElement("textarea");
-    messageText.rows = 1;
-    //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
-    messageText.onclick = () => {
-      if (messageText.readOnly) {
-        messageText.rows = 5;
-        messageContainer.style.alignItems = "flex-start";
-      }
-    };
-    //ON MOUSEOUT THE TEXTAREA RETURNS TO ONE ROW
-    messageText.onmouseout = () => {
-      messageText.readOnly ? (messageText.rows = 1) : "";
-    };
-    messageText.type = "text";
-    messageText.value = savedMessages[i];
-    messageText.readOnly = true;
-    messageText.id = "textInput";
-
-    //ADD TEXT INPUT TO CONTAINER
-    messageContainer.appendChild(messageText);
-    //ADD CONTAINER IN FRONT OF ADD&REMOVE BUTTONS
-    addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
-
-    //CREATE EMOJI SELECTOR ADD EMOJI AND MAKE IT DISABLED
     const emojiSelector = document.createElement("select");
-    const option = document.createElement("option");
-    option.innerHTML = buttonEmoji[i];
-    emojiSelector.add(option);
-    emojiSelector.id = "emojiSelector";
-    emojiSelector.disabled = true;
-    messageText.insertAdjacentElement("afterend", emojiSelector);
+    messageTextLogic(
+      messageText,
+      messageContainer,
+      "",
+      false,
+      savedMessages[i]
+    );
+    emojiSelectorLogic(emojiSelector, false, buttonEmoji[i]);
+
+    fillContainerWithElements(
+      messageContainer,
+      messageText,
+      addMessageButton,
+      emojiSelector,
+      "",
+      true
+    );
 
     createDeleteButton(
       emojiSelector,
