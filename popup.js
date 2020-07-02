@@ -6,7 +6,7 @@ const runApp = (tab) => {
   //CHECK IF TINDER PAGE IS OPEN IN TAB
   if (tab.url.includes("tinder.com")) {
     tabId = tab.id;
-    elementsLogic();
+    elementsCreationAndLogic();
     updatePopup();
   } else {
     const addAndRemoveButtons = document.getElementById("addAndRemoveButtons");
@@ -174,7 +174,7 @@ const setMessageButtonLogic = (
   });
 };
 
-const elementsLogic = () => {
+const elementsCreationAndLogic = () => {
   addMessageButton = document.getElementById("addMessage");
   removeAllMessagesButton = document.getElementById("removeAllButtons");
 
