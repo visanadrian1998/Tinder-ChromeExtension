@@ -32,6 +32,60 @@ window.addEventListener("DOMContentLoaded", () =>
   )
 );
 
+const fillContainerWithElements = (
+  container,
+  textInput,
+  addMessageButton,
+  emojiSelector,
+  setButton
+) => {
+  //ADD TEXT INPUT TO CONTAINER
+  container.appendChild(textInput);
+
+  //ADD CONTAINER IN FRONT OF ADD&REMOVE BUTTONS
+  addMessageButton.insertAdjacentElement("beforebegin", container);
+
+  //INSERT EMOJI SELECTOR AFTER TEXT INPUT
+  textInput.insertAdjacentElement("afterend", emojiSelector);
+
+  //INSERT SET BUTTON AFTER EMOJI SELECTOR
+  emojiSelector.insertAdjacentElement("afterend", setButton);
+};
+
+const messageTextLogic = (messageText, messageContainer, setMessageButton) => {
+  messageText.rows = 1;
+  //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
+  messageText.onclick = () => {
+    if (messageText.readOnly) {
+      messageText.rows = 5;
+      messageContainer.style.alignItems = "flex-start";
+    }
+  };
+  //ON MOUSEOUT THE TEXTAREA RETURNS TO ONE ROW
+  messageText.onmouseout = () => {
+    messageText.readOnly ? (messageText.rows = 1) : "";
+  };
+  messageText.id = "textInput";
+  messageText.type = "text";
+  //IF TEXT INPUT CONTAINS SOMETHING -> SET BUTTON ISN'T DISABLED;IF IT IS EMPTY->DISABLED BUTTON
+  messageText.addEventListener("keyup", function () {
+    messageText.value.length > 0
+      ? (setMessageButton.disabled = false)
+      : (setMessageButton.disabled = true);
+  });
+};
+
+//EMOJI SELECTOR:LOAD THE OPTIONS WITH OUR EMOJIS
+const emojiSelectorLogic = (emojiSelector) => {
+  //CREATE EMOJI SELECTOR AND LOAD THE OPTIONS WITH OUR EMOJIS
+  emojiSelector.id = "emojiSelector";
+  for (i = 0; i < changeableEmojis.length; i++) {
+    const option = document.createElement("option");
+    option.innerHTML = changeableEmojis[i];
+    emojiSelector.add(option);
+  }
+};
+
 const createDeleteButton = (
   elementToInsertAfter,
   selectedEmoji,
@@ -66,6 +120,59 @@ const createDeleteButton = (
   };
 };
 
+const setMessageButtonLogic = (
+  setMessageButton,
+  addMessageButton,
+  messageText,
+  emojiSelector
+) => {
+  //SETMESSAGEBUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
+  setMessageButton.disabled = true;
+  setMessageButton.type = "button";
+  setMessageButton.value = "SET!";
+  setMessageButton.id = "setMessageButton";
+
+  //ADDMESSAGEBUTTON IS DISABLED UNTIL WE SET THE CURRENT MESSAGE
+  addMessageButton.disabled = true;
+
+  setMessageButton.addEventListener("click", function () {
+    //ENABLE THE ADD MESSAGE BUTTON WHEN WE SET THE CURRENT MESSAGE
+    addMessageButton.disabled = false;
+
+    const message = messageText.value;
+    const emoji = emojiSelector.value;
+    savedMessages.push(message);
+    buttonEmoji.push(emoji);
+
+    //REMOVE THE SELECTED EMOJI FROM THE ARRAY OF EMOJIS AND SET THE NEW ARRAY IN LOCAL STORAGE
+    changeableEmojis = changeableEmojis.filter(
+      (emoji) => emoji != emojiSelector.value
+    );
+    chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
+
+    //SEND THE MESSAGE AND THE EMOJI TO CONTENT
+    chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
+
+    //TEXT INPUT AND EMOJI SELECTOR DISABLED;SET BUTTON DISSAPEARS
+    messageText.readOnly = true;
+    setMessageButton.style.display = "none";
+    emojiSelector.disabled = true;
+
+    createDeleteButton(
+      emojiSelector,
+      emoji,
+      message,
+      savedMessages,
+      buttonEmoji
+    );
+
+    //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
+    if (changeableEmojis.length == 0) {
+      addMessageButton.disabled = true;
+    }
+  });
+};
+
 const selectElements = () => {
   addMessageButton = document.getElementById("addMessage");
   removeAllMessagesButton = document.getElementById("removeAllButtons");
@@ -80,95 +187,30 @@ const selectElements = () => {
   addMessageButton.addEventListener("click", function () {
     const messageContainer = document.createElement("div");
     messageContainer.id = "messageContainer";
-
     //CREATE TEXT INPUT
     const messageText = document.createElement("textarea");
-    messageText.rows = 1;
-    //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
-    messageText.onclick = () => {
-      if (messageText.readOnly) {
-        messageText.rows = 5;
-        messageContainer.style.alignItems = "flex-start";
-      }
-    };
-    //ON MOUSEOUT THE TEXTAREA RETURNS TO ONE ROW
-    messageText.onmouseout = () => {
-      messageText.readOnly ? (messageText.rows = 1) : "";
-    };
-    messageText.id = "textInput";
-    messageText.type = "text";
-    //ADD TEXT INPUT TO CONTAINER
-    messageContainer.appendChild(messageText);
-
-    //ADD CONTAINER IN FRONT OF ADD&REMOVE BUTTONS
-    addMessageButton.insertAdjacentElement("beforebegin", messageContainer);
-
-    //CREATE EMOJI SELECTOR AND LOAD THE OPTIONS WITH OUR EMOJIS
+    //CREATE EMOJI SELECTOR
     const emojiSelector = document.createElement("select");
-    emojiSelector.id = "emojiSelector";
-    for (i = 0; i < changeableEmojis.length; i++) {
-      const option = document.createElement("option");
-      option.innerHTML = changeableEmojis[i];
-      emojiSelector.add(option);
-    }
-
-    //INSERT EMOJI SELECTOR AFTER TEXT INPUT
-    messageText.insertAdjacentElement("afterend", emojiSelector);
-
     //CREATE "SET" BUTTON
     const setMessageButton = document.createElement("input");
-    //ADDMESSAGEBUTTON IS DISABLED UNTIL WE SET THE CURRENT MESSAGE
-    addMessageButton.disabled = true;
-    //SETMESSAGEBUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
-    setMessageButton.disabled = true;
-    setMessageButton.type = "button";
-    setMessageButton.value = "SET!";
-    setMessageButton.id = "setMessageButton";
 
-    //INSERT SET BUTTON AFTER EMOJI SELECTOR
-    emojiSelector.insertAdjacentElement("afterend", setMessageButton);
-    //IF TEXT INPUT CONTAINS SOMETHING -> SET BUTTON ISN'T DISABLED;IF IT IS EMPTY->DISABLED BUTTON
-    messageText.addEventListener("keyup", function () {
-      messageText.value.length > 0
-        ? (setMessageButton.disabled = false)
-        : (setMessageButton.disabled = true);
-    });
+    messageTextLogic(messageText, messageContainer, setMessageButton);
+    emojiSelectorLogic(emojiSelector);
 
-    setMessageButton.addEventListener("click", function () {
-      //ENABLE THE ADD MESSAGE BUTTON WHEN WE SET THE CURRENT MESSAGE
-      document.getElementById("addMessage").disabled = false;
+    fillContainerWithElements(
+      messageContainer,
+      messageText,
+      addMessageButton,
+      emojiSelector,
+      setMessageButton
+    );
 
-      const message = messageText.value;
-      const emoji = emojiSelector.value;
-      buttonText.push(message);
-      buttonEmoji.push(emoji);
-
-      //REMOVE THE SELECTED EMOJI FROM THE ARRAY OF EMOJIS AND SET THE NEW ARRAY IN LOCAL STORAGE
-      changeableEmojis = changeableEmojis.filter(
-        (emoji) => emoji != emojiSelector.value
-      );
-      chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
-
-      //SEND THE MESSAGE AND THE EMOJI TO CONTENT
-      chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
-
-      //TEXT INPUT AND EMOJI SELECTOR DISABLED;SET BUTTON DISSAPEARS
-      messageText.readOnly = true;
-      setMessageButton.style.display = "none";
-      emojiSelector.disabled = true;
-
-      createDeleteButton(
-        emojiSelector,
-        emoji,
-        message,
-        buttonText,
-        buttonEmoji
-      );
-      //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
-      if (changeableEmojis.length == 0) {
-        document.getElementById("addMessage").disabled = true;
-      }
-    });
+    setMessageButtonLogic(
+      setMessageButton,
+      addMessageButton,
+      messageText,
+      emojiSelector
+    );
   });
 };
 
@@ -207,21 +249,21 @@ function getEmojisFromStorage() {
 
 async function updatePopup() {
   //FETCH THE MESSAGES AND EMOJIS FROM STORAGE
-  buttonText = await getButtonTextFromStorage();
+  savedMessages = await getButtonTextFromStorage();
   buttonEmoji = await getButtonEmojiFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
   //IF THE NUMBER OF MESSAGES EQUALS THE NUMBER OF ALL EMOJIS -> WE HAVE USED ALL EMOJIS SO WE CAN'T ADD NEW MESSAGES
-  if (buttonText.length == stockEmojis.length) {
+  if (savedMessages.length == stockEmojis.length) {
     document.getElementById("addMessage").disabled = true;
   }
 
-  if (changeableEmojis.length == 0 && buttonText.length == 0) {
+  if (changeableEmojis.length == 0 && savedMessages.length == 0) {
     changeableEmojis = stockEmojis;
   }
 
   //FOR EVERY MESSAGE WE CREATE A CONTAINER WITH:THE MESSAGE, THE EMOJI AND A DELETE BUTTON
-  for (let i = 0; i < buttonText.length; i++) {
+  for (let i = 0; i < savedMessages.length; i++) {
     //CREATE CONTAINER
     const messageContainer = document.createElement("div");
     messageContainer.id = "messageContainer";
@@ -241,7 +283,7 @@ async function updatePopup() {
       messageText.readOnly ? (messageText.rows = 1) : "";
     };
     messageText.type = "text";
-    messageText.value = buttonText[i];
+    messageText.value = savedMessages[i];
     messageText.readOnly = true;
     messageText.id = "textInput";
 
@@ -262,8 +304,8 @@ async function updatePopup() {
     createDeleteButton(
       emojiSelector,
       buttonEmoji[i],
-      buttonText[i],
-      buttonText,
+      savedMessages[i],
+      savedMessages,
       buttonEmoji
     );
   }
