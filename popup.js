@@ -82,10 +82,21 @@ const selectElements = () => {
     messageContainer.id = "messageContainer";
 
     //CREATE TEXT INPUT
-    const messageText = document.createElement("input");
+    const messageText = document.createElement("textarea");
+    messageText.rows = 1;
+    //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
+    messageText.onclick = () => {
+      if (messageText.readOnly) {
+        messageText.rows = 5;
+        messageContainer.style.alignItems = "flex-start";
+      }
+    };
+    //ON MOUSEOUT THE TEXTAREA RETURNS TO ONE ROW
+    messageText.onmouseout = () => {
+      messageText.readOnly ? (messageText.rows = 1) : "";
+    };
     messageText.id = "textInput";
     messageText.type = "text";
-
     //ADD TEXT INPUT TO CONTAINER
     messageContainer.appendChild(messageText);
 
@@ -216,7 +227,19 @@ async function updatePopup() {
     messageContainer.id = "messageContainer";
 
     //CREATE TEXT INPUT AND MAKE IT READ-ONLY
-    const messageText = document.createElement("input");
+    const messageText = document.createElement("textarea");
+    messageText.rows = 1;
+    //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
+    messageText.onclick = () => {
+      if (messageText.readOnly) {
+        messageText.rows = 5;
+        messageContainer.style.alignItems = "flex-start";
+      }
+    };
+    //ON MOUSEOUT THE TEXTAREA RETURNS TO ONE ROW
+    messageText.onmouseout = () => {
+      messageText.readOnly ? (messageText.rows = 1) : "";
+    };
     messageText.type = "text";
     messageText.value = buttonText[i];
     messageText.readOnly = true;

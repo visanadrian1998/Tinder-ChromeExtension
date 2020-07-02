@@ -64,6 +64,10 @@ button:disabled {
 #textInput {
   vertical-align: middle;
   margin: 0 5px 0;
+  resize: none;
+}
+#textInput::-webkit-scrollbar {
+  display: none;
 }
 #setMessageButton {
   vertical-align: middle;
