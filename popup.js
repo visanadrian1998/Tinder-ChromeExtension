@@ -1,6 +1,6 @@
 let tabId = null;
-const stockEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
-let changeableEmojis = ["✪", "⚔️", "☎", "♛", "♫", "☯", "❤️"];
+const stockEmojis = ["✪", "✂", "☎", "♛", "♫", "☯", "⚖"];
+let changeableEmojis = ["✪", "✂", "☎", "♛", "♫", "☯", "⚖"];
 
 const runApp = (tab) => {
   //CHECK IF TINDER PAGE IS OPEN IN TAB
@@ -38,7 +38,7 @@ const selectElements = () => {
 
   //SEND MESSAGE TO CONTENT AND IN LOCAL STORAGE SET EMOJIS TO THE STOCK ONES
   removeAllMessagesButton.addEventListener("click", function () {
-    chrome.tabs.sendMessage(tabId, { remove: "remove" });
+    chrome.tabs.sendMessage(tabId, { removeAllButtons: "remove" });
     chrome.storage.local.set({ emojis: stockEmojis }, function () {});
     window.close();
   });
@@ -217,7 +217,7 @@ async function updatePopup() {
       chrome.storage.local.set({ emojis: changeableEmojis }, function () {});
 
       //SEND REMOVE MESSAGE TO CONTENT
-      chrome.tabs.sendMessage(tabId, { removebutton: "remove" });
+      chrome.tabs.sendMessage(tabId, { removeButton: "remove" });
 
       window.close();
     };

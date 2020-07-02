@@ -1,162 +1,181 @@
-// const conversation_state = {
-//   isInConversation: false,
-// };
+const conversation_state = {
+  isInConversation: false,
+};
 
-// let messageReceived;
-// let emojiReceived;
-// let url;
-// let addedButtons = [];
-// let buttonMessages = [];
-// let buttonEmojis = [];
+let messageReceived;
+let emojiReceived;
+let url;
+let addedButtons = [];
+let buttonMessages = [];
+let buttonEmojis = [];
 
-// const createButton = (message) => {
-//   const messageReceived = message.addmessage;
-//   const emojiReceived = message.addemoji;
-//   const messageButton = document.createElement("input");
-//   messageButton.type = "button";
-//   messageButton.message = messageReceived;
-//   messageButton.emoji = emojiReceived;
-//   messageButton.classList.add("buton");
+const createButton = (message) => {
+  //RECEIVE THE MESSAGE AND EMOJI FROM POPUP
+  const messageReceived = message.addmessage;
+  const emojiReceived = message.addemoji;
 
-//   buttonMessages.push(messageReceived);
-//   buttonEmojis.push(emojiReceived);
-//   addedButtons.push(messagebtn);
-//   try {
-//     chrome.storage.local.set({ messages: buttonMessages }, function () {});
-//     chrome.storage.local.set({ usedEmojis: buttonEmojis }, function () {});
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
+  //CREATE BUTTON AND FILL IT WITH MESSAGE AND EMOJI
+  const messageButton = document.createElement("input");
+  messageButton.type = "button";
+  messageButton.name = messageReceived;
+  messageButton.value = emojiReceived;
+  messageButton.classList.add("messageButton");
 
-// chrome.runtime.onMessage.addListener((message) => {
-//   if (message.addmessage) {
-//     createButton(message);
-//     insertAddedMessages();
-//   }
-//   if (message.removeAllButtons) {
-//     removeAllMessages();
-//     exitConversation();
-//   }
-//   if (message.removebutton) {
-//     addedButtons.length = 0;
-//     updateButtons();
-//     exitConversation();
-//   }
-// });
+  //PUSH THE MESSAGE AND EMOJI IN ARRAYS AND UPDATE THE LOCAL STORAGE
+  buttonMessages.push(messageReceived);
+  buttonEmojis.push(emojiReceived);
+  addedButtons.push(messageButton);
+  try {
+    chrome.storage.local.set({ name: buttonMessages }, function () {});
+    chrome.storage.local.set({ value: buttonEmojis }, function () {});
+  } catch (e) {
+    console.log(e);
+  }
+};
 
-// const runApp = () => {
-//   window.addEventListener("click", function () {
-//     if (
-//       !window.location.href.includes("messages") ||
-//       url != window.location.href
-//     ) {
-//       conversation_state.isInConversation = false;
-//       for (let i = 0; i < addedButtons.length; i++) {
-//         addedButtons[i].disabled = false;
-//       }
-//     }
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.addmessage) {
+    createButton(message);
+    insertAddedMessages();
+  }
+  if (message.removeAllButtons) {
+    removeAllMessages();
+    exitConversation();
+  }
+  if (message.removeButton) {
+    addedButtons.length = 0;
+    updateButtons();
+    exitConversation();
+  }
+});
 
-//     if (
-//       window.location.href.includes("messages") &&
-//       !conversation_state.isInConversation
-//     ) {
-//       conversation_state.isInConversation = true;
-//       url = window.location.href;
-//       try {
-//         this.setTimeout(function () {
-//           insertAddedMessages();
-//         }, 500);
-//       } catch (e) {
-//         this.console.log(e);
-//       }
-//     }
-//   });
-// };
-// updateButtons();
-// runApp();
+const runApp = () => {
+  window.addEventListener("click", function () {
+    //IF THE URL DOESNT INCLUDE "MESSAGE" OR THE CURRENT LOCATION DOESN'T MATCH THE LAST CONVERSATION URL ->
+    if (
+      !window.location.href.includes("messages") ||
+      url != window.location.href
+    ) {
+      //IT MEANS WE HAVE EXITED THE CONVERSATION SO WE ENABLE ALL THE MESSAGE BUTTONS
+      conversation_state.isInConversation = false;
+      for (let i = 0; i < addedButtons.length; i++) {
+        addedButtons[i].disabled = false;
+      }
+    }
 
-// function sendMessage(message) {
-//   window.InputEvent = window.Event || window.InputEvent;
+    //IF THE URL INCLUDES MESSAGES & WE WEREN'T IN CONVERSATION BEFORE CLICK ->
+    //IT MEANS WE HAVE JUST ENTERED A CONVERSATION SO->
+    if (
+      window.location.href.includes("messages") &&
+      !conversation_state.isInConversation
+    ) {
+      //WE UPDATE THE CURRENT URL AND INSERT THE BUTTONS
+      conversation_state.isInConversation = true;
+      url = window.location.href;
+      try {
+        this.setTimeout(function () {
+          insertAddedMessages();
+        }, 500);
+      } catch (e) {
+        this.console.log(e);
+      }
+    }
+  });
+};
+updateButtons();
+runApp();
 
-//   var event = new InputEvent("input", {
-//     bubbles: true,
-//   });
+function sendMessage(message) {
+  window.InputEvent = window.Event || window.InputEvent;
 
-//   const textarea = document.getElementById("chat-text-area");
-//   textarea.value = message;
-//   textarea.dispatchEvent(event);
-//   const submit = document.getElementsByClassName(
-//     "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
-//   )[0];
-//   submit.click();
-//   message.disabled = true;
-// }
+  var event = new InputEvent("input", {
+    bubbles: true,
+  });
+  //SELECT THE MESSAGE AREA -> INSERT OUR MESSAGE -> SEND IT
+  const textarea = document.getElementById("chat-text-area");
+  textarea.value = message.name;
+  textarea.dispatchEvent(event);
+  const submit = document.getElementsByClassName(
+    "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
+  )[0];
+  submit.click();
 
-// function insertAddedMessages() {
-//   for (let i = 0; i < addedButtons.length; i++) {
-//     try {
-//       const chatbox = document.getElementsByClassName(
-//         "D(f) W(100%) BdT Bdtc($c-divider) Bgc(#fff) Pos(r)"
-//       )[0];
-//       chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
+  //DISABLE THE BUTTON SO WE DON'T SEND THE SAME MESSAGE TWICE
+  message.disabled = true;
+}
 
-//       addedButtons[i].style.left = `${35 * i}px`;
+function insertAddedMessages() {
+  //FOR EVERY BUTTON WE SELECT THE CHATBOX AND WE INSERT THE BUTTON TO BE DISPLAYED
+  for (let i = 0; i < addedButtons.length; i++) {
+    try {
+      const chatbox = document.getElementsByClassName(
+        "D(f) W(100%) BdT Bdtc($c-divider) Bgc(#fff) Pos(r)"
+      )[0];
+      chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
 
-//       addedButtons[i].onclick = function () {};
-//     } catch (e) {
-//       console.log(e);
-//     }
-//   }
-// }
+      addedButtons[i].style.left = `${40 * i}px`;
 
-// function removeAllMessages() {
-//   addedButtons.length = 0;
-//   buttonMessages.length = 0;
-//   buttonEmojis.length = 0;
-//   chrome.storage.local.set({ name: buttonMessages });
-//   chrome.storage.local.set({ value: buttonEmojis });
-// }
+      addedButtons[i].onclick = function () {
+        sendMessage(addedButtons[i]);
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
 
-// function getButtonTextFromStorage() {
-//   return new Promise(function (resolve, reject) {
-//     setTimeout(function () {
-//       chrome.storage.local.get({ name: [] }, function (result) {
-//         resolve(result.name);
-//       });
-//     }, 0);
-//   });
-// }
-// function getButtonEmojiFromStorage() {
-//   return new Promise(function (resolve, reject) {
-//     setTimeout(function () {
-//       chrome.storage.local.get({ value: [] }, function (result) {
-//         resolve(result.value);
-//       });
-//     }, 0);
-//   });
-// }
+//EMPTY THE ARRAYS AND UPDATE LOCAL STORAGE
+function removeAllMessages() {
+  addedButtons.length = 0;
+  buttonMessages.length = 0;
+  buttonEmojis.length = 0;
+  chrome.storage.local.set({ name: buttonMessages });
+  chrome.storage.local.set({ value: buttonEmojis });
+}
 
-// async function updateButtons() {
-//   buttonMessages = await getButtonTextFromStorage();
-//   buttonEmojis = await getButtonEmojiFromStorage();
-//   for (let i = 0; i < buttonMessages.length; i++) {
-//     var messagebtn = document.createElement("input");
-//     messagebtn.type = "button";
-//     messagebtn.name = buttonMessages[i];
-//     messagebtn.value = buttonEmojis[i];
-//     messagebtn.classList.add("buton");
-//     addedButtons.push(messagebtn);
-//   }
-// }
+//GET ALL MESSAGES FROM STORAGE
+function getButtonTextFromStorage() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      chrome.storage.local.get({ name: [] }, function (result) {
+        resolve(result.name);
+      });
+    }, 0);
+  });
+}
 
-// function exitConversation() {
-//   try {
-//     const exit = document.getElementsByClassName(
-//       "C($c-divider) Bdc($c-divider) Bdc($c-gray):h C($c-gray):h Bdrs(50%) Bds(s) Bdw(3px) Trsdu($fast) Trsp($transform) Rotate(-90deg):h--ml close P(0) Lh(1) Cur(p) focus-button-style"
-//     )[0];
-//     exit.click();
-//   } catch (e) {
-//     console.log(e);
-//   }
-// }
+//GET ALL USED EMOJIS FROM STORAGE
+function getButtonEmojiFromStorage() {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      chrome.storage.local.get({ value: [] }, function (result) {
+        resolve(result.value);
+      });
+    }, 0);
+  });
+}
+
+//GET MESSAGES AND EMOJIS FROM STORAGE AND CREATE BUTTONS WITH THEM
+async function updateButtons() {
+  buttonMessages = await getButtonTextFromStorage();
+  buttonEmojis = await getButtonEmojiFromStorage();
+  for (let i = 0; i < buttonMessages.length; i++) {
+    const messageButton = document.createElement("input");
+    messageButton.type = "button";
+    messageButton.name = buttonMessages[i];
+    messageButton.value = buttonEmojis[i];
+    messageButton.classList.add("messageButton");
+    addedButtons.push(messageButton);
+  }
+}
+
+function exitConversation() {
+  try {
+    const exit = document.getElementsByClassName(
+      "C($c-divider) Bdc($c-divider) Bdc($c-gray):h C($c-gray):h Bdrs(50%) Bds(s) Bdw(3px) Trsdu($fast) Trsp($transform) Rotate(-90deg):h--ml close P(0) Lh(1) Cur(p) focus-button-style"
+    )[0];
+    exit.click();
+  } catch (e) {
+    console.log(e);
+  }
+}
