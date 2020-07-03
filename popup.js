@@ -165,7 +165,7 @@ const setMessageButtonLogic = (
     const message = messageText.value;
     const emoji = emojiSelector.value;
     savedMessages.push(message);
-    buttonEmoji.push(emoji);
+    usedEmojis.push(emoji);
 
     //REMOVE THE SELECTED EMOJI FROM THE ARRAY OF EMOJIS AND SET THE NEW ARRAY IN LOCAL STORAGE
     changeableEmojis = changeableEmojis.filter(
@@ -186,7 +186,7 @@ const setMessageButtonLogic = (
       emoji,
       message,
       savedMessages,
-      buttonEmoji
+      usedEmojis
     );
 
     //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
@@ -239,7 +239,7 @@ const elementsCreationAndLogic = () => {
 };
 
 //GET ALL MESSAGES FROM STORAGE
-function getButtonTextFromStorage() {
+function getSavedMessagesFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ name: [] }, function (result) {
@@ -250,7 +250,7 @@ function getButtonTextFromStorage() {
 }
 
 //GET THE USED EMOJIS FROM STORAGE
-function getButtonEmojiFromStorage() {
+function getusedEmojisFromStorage() {
   return new Promise(function (resolve, reject) {
     setTimeout(function () {
       chrome.storage.local.get({ value: [] }, function (result) {
@@ -273,8 +273,8 @@ function getEmojisFromStorage() {
 
 async function updatePopup() {
   //FETCH THE MESSAGES AND EMOJIS FROM STORAGE
-  savedMessages = await getButtonTextFromStorage();
-  buttonEmoji = await getButtonEmojiFromStorage();
+  savedMessages = await getSavedMessagesFromStorage();
+  usedEmojis = await getusedEmojisFromStorage();
   changeableEmojis = await getEmojisFromStorage();
 
   //IF THE NUMBER OF MESSAGES EQUALS THE NUMBER OF ALL EMOJIS -> WE HAVE USED ALL EMOJIS SO WE CAN'T ADD NEW MESSAGES
@@ -301,7 +301,7 @@ async function updatePopup() {
       false,
       savedMessages[i]
     );
-    emojiSelectorLogic(emojiSelector, false, buttonEmoji[i]);
+    emojiSelectorLogic(emojiSelector, false, usedEmojis[i]);
 
     fillContainerWithElements(
       messageContainer,
@@ -314,10 +314,10 @@ async function updatePopup() {
 
     createDeleteButton(
       emojiSelector,
-      buttonEmoji[i],
+      usedEmojis[i],
       savedMessages[i],
       savedMessages,
-      buttonEmoji
+      usedEmojis
     );
   }
 }
