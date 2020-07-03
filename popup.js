@@ -114,7 +114,8 @@ const createDeleteButton = (
   selectedEmoji,
   selectedMessage,
   messagesArray,
-  emojisArray
+  emojisArray,
+  container
 ) => {
   const deleteFromPopup = document.createElement("input");
   deleteFromPopup.type = "button";
@@ -123,7 +124,11 @@ const createDeleteButton = (
   elementToInsertAfter.insertAdjacentElement("afterend", deleteFromPopup);
 
   //WHEN WE DELETE A MESSAGE:
-  deleteFromPopup.onclick = function () {
+  deleteFromPopup.onclick = async function () {
+    //FIRST WE FETCH THE UPDATED ELEMENTS TO BE UP TO DATE
+    messagesArray = await getSavedMessagesFromStorage();
+    emojisArray = await getusedEmojisFromStorage();
+    changeableEmojis = await getEmojisFromStorage();
     //ADD THE EMOJI BACK TO THE ARRAY OF AVAILABLE EMOJIS
     changeableEmojis.push(selectedEmoji);
 
@@ -139,7 +144,8 @@ const createDeleteButton = (
     //SEND REMOVE MESSAGE TO CONTENT
     chrome.tabs.sendMessage(tabId, { removeButton: "remove" });
 
-    window.close();
+    //AFTER WE DELETE THE MESSAGE WE HIDE THE RESPECTIVE CONTAINER
+    container.style.display = "none";
   };
 };
 
@@ -147,7 +153,8 @@ const setMessageButtonLogic = (
   setMessageButton,
   addMessageButton,
   messageText,
-  emojiSelector
+  emojiSelector,
+  messageContainer
 ) => {
   //SETMESSAGEBUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
   setMessageButton.disabled = true;
@@ -186,7 +193,8 @@ const setMessageButtonLogic = (
       emoji,
       message,
       savedMessages,
-      usedEmojis
+      usedEmojis,
+      messageContainer
     );
 
     //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
@@ -233,7 +241,8 @@ const elementsCreationAndLogic = () => {
       setMessageButton,
       addMessageButton,
       messageText,
-      emojiSelector
+      emojiSelector,
+      messageContainer
     );
   });
 };
@@ -317,7 +326,8 @@ async function updatePopup() {
       usedEmojis[i],
       savedMessages[i],
       savedMessages,
-      usedEmojis
+      usedEmojis,
+      messageContainer
     );
   }
 }
