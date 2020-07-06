@@ -60,6 +60,7 @@ button:disabled {
   align-items: center;
   padding-left: 137px;
   margin: 0 0 10px;
+  transition: 1.5s;
 }
 
 #textInput {
@@ -117,7 +118,6 @@ button:disabled {
   margin: 0 5px 0;
   font-size: 15px;
   font-weight: bold;
-  box-shadow: 0;
   transition: 0.8s;
 }
 

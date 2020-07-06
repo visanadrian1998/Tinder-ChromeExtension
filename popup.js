@@ -145,7 +145,10 @@ const createDeleteButton = (
     chrome.tabs.sendMessage(tabId, { removeButton: "remove" });
 
     //AFTER WE DELETE THE MESSAGE WE HIDE THE RESPECTIVE CONTAINER
-    container.style.display = "none";
+    container.style.transform = "translateX(-500px)";
+    container.addEventListener("transitionend", () => {
+      container.style.display = "none";
+    });
   };
 };
 
