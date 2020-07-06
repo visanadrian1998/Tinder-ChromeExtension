@@ -10,10 +10,14 @@ const runApp = (tab) => {
     updatePopup();
   } else {
     const addAndRemoveButtons = document.getElementById("addAndRemoveButtons");
+    const automaticMessageWrapper = document.getElementById(
+      "automaticMessageWrapper"
+    );
     const notOnTinder = document.getElementById("notOnTinder");
 
     //IF WE ARE NOT ON TINDER -> DISPLAY NOTONTINDER COMPONENT
     addAndRemoveButtons.style.display = "none";
+    automaticMessageWrapper.style.display = "none";
     notOnTinder.style.display = "inline";
 
     //CLICKING ON LINK -> CREATE NEW TAB THAT TAKES YOU TO TINDER.COM
@@ -209,10 +213,29 @@ const setMessageButtonLogic = (
   });
 };
 
+const automaticMessageLogic = (button, input) => {
+  //BUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
+  button.disabled = true;
+  input.addEventListener("keyup", function () {
+    input.value.length > 0
+      ? (button.disabled = false)
+      : (button.disabled = true);
+  });
+  //SEND THE PREDEFINED MESSAGE TO CONTENT SCRIPT
+  button.addEventListener("click", () => {
+    const inputValue = input.value;
+    chrome.tabs.sendMessage(tabId, { sendAutomatic: inputValue });
+    input.value = "";
+    button.disabled = true;
+  });
+};
+
 const elementsCreationAndLogic = () => {
   addMessageButton = document.getElementById("addMessage");
   removeAllMessagesButton = document.getElementById("removeAllButtons");
-
+  automaticMessageButton = document.getElementById("automaticMessageButton");
+  automaticMessageInput = document.getElementById("automaticMessageInput");
+  automaticMessageLogic(automaticMessageButton, automaticMessageInput);
   //SEND MESSAGE TO CONTENT AND IN LOCAL STORAGE SET EMOJIS TO THE STOCK ONES
   removeAllMessagesButton.addEventListener("click", function () {
     chrome.tabs.sendMessage(tabId, { removeAllButtons: "remove" });

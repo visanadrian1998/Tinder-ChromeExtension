@@ -47,8 +47,50 @@ chrome.runtime.onMessage.addListener((message) => {
     updateButtons();
     exitConversation();
   }
+  if (message.sendAutomatic) {
+    sendAutomaticMessage(message.sendAutomatic);
+  }
 });
+async function enterConversationSendMessage(match, message) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      //ACCESS THE MATCH CONVERSATION
+      match.click();
+      setTimeout(() => {
+        window.InputEvent = window.Event || window.InputEvent;
+        var event = new InputEvent("input", {
+          bubbles: true,
+        });
+        //SELECT THE MESSAGE AREA -> INSERT OUR MESSAGE -> SEND IT
+        const textarea = document.getElementById("chat-text-area");
+        textarea.value = message;
+        textarea.dispatchEvent(event);
+        //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
+        const submit = document.getElementsByClassName(
+          "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
+        )[0];
+        submit.click();
+        resolve(post);
+      }, 3000);
+    }, 500);
+  });
+}
+const sendAutomaticMessage = async (message) => {
+  //SELECT ALL AVAILABLE MATCHES
+  let matches = document.getElementsByClassName(
+    "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
+  );
+  //THE ITERATION STARTS FROM 1 BECAUSE ON POSITION 0 THERE ISNT A MATCH IT'S THE NUMBER OF LIKES
+  for (let i = 1; i < matches.length; i++) {
+    await enterConversationSendMessage(matches[i], message);
+  }
 
+  //IF THERE ARE REMAINING MATCHES THAT WERE NOT SELECTED WE ITERATE THEM AGAIN
+  matches = document.getElementsByClassName(
+    "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
+  );
+  matches.length > 1 ? sendAutomaticMessage(message) : "";
+};
 const runApp = () => {
   window.addEventListener("click", function () {
     //IF THE URL DOESNT INCLUDE "MESSAGE" OR THE CURRENT LOCATION DOESN'T MATCH THE LAST CONVERSATION URL ->
