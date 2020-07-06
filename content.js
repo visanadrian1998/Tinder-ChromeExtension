@@ -63,14 +63,18 @@ async function enterConversationSendMessage(match, message) {
         });
         //SELECT THE MESSAGE AREA -> INSERT OUR MESSAGE -> SEND IT
         const textarea = document.getElementById("chat-text-area");
-        textarea.value = message;
-        textarea.dispatchEvent(event);
+        if (textarea) {
+          textarea.value = message;
+          textarea.dispatchEvent(event);
+        }
         //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
         const submit = document.getElementsByClassName(
           "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
         )[0];
-        submit.click();
-        resolve(post);
+        if (submit) {
+          submit.click();
+        }
+        resolve(match);
       }, 3000);
     }, 500);
   });
@@ -89,7 +93,7 @@ const sendAutomaticMessage = async (message) => {
   matches = document.getElementsByClassName(
     "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
   );
-  matches.length > 1 ? sendAutomaticMessage(message) : "";
+  matches.length > 0 ? sendAutomaticMessage(message) : "";
 };
 const runApp = () => {
   window.addEventListener("click", function () {
