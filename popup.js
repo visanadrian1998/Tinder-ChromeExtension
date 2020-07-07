@@ -2,6 +2,12 @@ let tabId = null;
 const stockEmojis = ["✪", "✂", "☎", "♛", "♫", "☯", "⚖"];
 let changeableEmojis = ["✪", "✂", "☎", "♛", "♫", "☯", "⚖"];
 
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.noMatches) {
+    document.getElementById("noMatchesText").style.display = "inline";
+  }
+});
+
 const runApp = (tab) => {
   //CHECK IF TINDER PAGE IS OPEN IN TAB
   if (tab.url.includes("tinder.com")) {
@@ -139,6 +145,7 @@ const createDeleteButton = (
     //ADD THE EMOJI BACK TO THE ARRAY OF AVAILABLE EMOJIS
     changeableEmojis.push(selectedEmoji);
 
+    //WHEN WE DELETE A MESSAGE ADDMESSAGEBUTTON IS ENABLED BECAUSE WE HAVE AT LEAST ONE AVAILABLE EMOJI
     addMessageButton.disabled = false;
 
     //REMOVE THE MESSAGE FROM THE ARRAY OF MESSAGES
@@ -226,6 +233,11 @@ const automaticMessageLogic = (button, input) => {
     input.value.length > 0
       ? (button.disabled = false)
       : (button.disabled = true);
+  });
+  input.addEventListener("keydown", () => {
+    if (document.getElementById("noMatchesText").style.display == "inline") {
+      document.getElementById("noMatchesText").style.display = "none";
+    }
   });
   //SEND THE PREDEFINED MESSAGE TO CONTENT SCRIPT
   button.addEventListener("click", () => {

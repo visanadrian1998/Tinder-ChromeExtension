@@ -84,16 +84,26 @@ const sendAutomaticMessage = async (message) => {
   let matches = document.getElementsByClassName(
     "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
   );
-  //THE ITERATION STARTS FROM 1 BECAUSE ON POSITION 0 THERE ISNT A MATCH IT'S THE NUMBER OF LIKES
-  for (let i = 1; i < matches.length; i++) {
-    await enterConversationSendMessage(matches[i], message);
-  }
+  console.log(matches.length);
+  if (matches.length <= 1) {
+    chrome.runtime.sendMessage(
+      {
+        noMatches: "You have no matches:((",
+      },
+      function (response) {}
+    );
+  } else {
+    //THE ITERATION STARTS FROM 1 BECAUSE ON POSITION 0 THERE ISNT A MATCH IT'S THE NUMBER OF LIKES
+    for (let i = 1; i < matches.length; i++) {
+      await enterConversationSendMessage(matches[i], message);
+    }
 
-  //IF THERE ARE REMAINING MATCHES THAT WERE NOT SELECTED WE ITERATE THEM AGAIN
-  matches = document.getElementsByClassName(
-    "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
-  );
-  matches.length > 1 ? sendAutomaticMessage(message) : "";
+    //IF THERE ARE REMAINING MATCHES THAT WERE NOT SELECTED WE ITERATE THEM AGAIN
+    matches = document.getElementsByClassName(
+      "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
+    );
+    matches.length > 1 ? sendAutomaticMessage(message) : "";
+  }
 };
 const runApp = () => {
   window.addEventListener("click", function () {

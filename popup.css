@@ -147,3 +147,7 @@ img {
 #automaticMessage {
   color: gray;
 }
+#noMatchesText {
+  display: none;
+  color: #f44336;
+}
