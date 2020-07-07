@@ -139,6 +139,6 @@ img {
   background-color: transparent;
   font-weight: bold;
 }
-#savedMessages {
-  text-decoration: underline;
+#automaticMessage {
+  color: white;
 }

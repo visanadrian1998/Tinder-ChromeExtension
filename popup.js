@@ -241,14 +241,14 @@ const elementsCreationAndLogic = () => {
   NavBarSaved.addEventListener("click", () => {
     addAndRemoveButtons.style.display = "inline";
     automaticMessageWrapper.style.display = "none";
-    NavBarSaved.style.textDecoration = "underline";
-    NavBarAutomatic.style.textDecoration = "none";
+    NavBarSaved.style.color = "#f44336";
+    NavBarAutomatic.style.color = "white";
   });
   NavBarAutomatic.addEventListener("click", () => {
     addAndRemoveButtons.style.display = "none";
     automaticMessageWrapper.style.display = "inline";
-    NavBarSaved.style.textDecoration = "none";
-    NavBarAutomatic.style.textDecoration = "underline";
+    NavBarSaved.style.color = "white";
+    NavBarAutomatic.style.color = "#f44336";
   });
 
   addMessageButton = document.getElementById("addMessage");
