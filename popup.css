@@ -26,7 +26,7 @@ img {
   text-align: center;
 }
 
-button {
+.popUpButton {
   border: 1px solid #2196f3;
   background: #2196f3;
   color: white;
@@ -41,11 +41,11 @@ button {
   font-weight: bold;
 }
 
-button:hover {
+.popUpButton:hover {
   border: 1px solid #03a9f4;
   background: #03a9f4;
 }
-button:disabled {
+.popUpButton:disabled {
   pointer-events: none;
   opacity: 0.5;
 }
@@ -126,4 +126,19 @@ button:disabled {
   background-color: white;
   color: #f44336;
   transform: rotate(180deg);
+}
+#automaticMessageWrapper {
+  display: none;
+}
+.NavBar {
+  margin: 0 0 20px;
+}
+.NavBarButton {
+  color: #f44336;
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+}
+#savedMessages {
+  text-decoration: underline;
 }

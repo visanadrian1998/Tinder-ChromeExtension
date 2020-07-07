@@ -93,7 +93,7 @@ const sendAutomaticMessage = async (message) => {
   matches = document.getElementsByClassName(
     "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
   );
-  matches.length > 0 ? sendAutomaticMessage(message) : "";
+  matches.length > 1 ? sendAutomaticMessage(message) : "";
 };
 const runApp = () => {
   window.addEventListener("click", function () {

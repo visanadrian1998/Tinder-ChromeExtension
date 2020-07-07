@@ -9,6 +9,8 @@ const runApp = (tab) => {
     elementsCreationAndLogic();
     updatePopup();
   } else {
+    //GET POPUP COMPONENTS
+    const NavBar = document.getElementById("NavBar");
     const addAndRemoveButtons = document.getElementById("addAndRemoveButtons");
     const automaticMessageWrapper = document.getElementById(
       "automaticMessageWrapper"
@@ -16,6 +18,7 @@ const runApp = (tab) => {
     const notOnTinder = document.getElementById("notOnTinder");
 
     //IF WE ARE NOT ON TINDER -> DISPLAY NOTONTINDER COMPONENT
+    NavBar.style.display = "none";
     addAndRemoveButtons.style.display = "none";
     automaticMessageWrapper.style.display = "none";
     notOnTinder.style.display = "inline";
@@ -231,6 +234,23 @@ const automaticMessageLogic = (button, input) => {
 };
 
 const elementsCreationAndLogic = () => {
+  //NAVBAR LOGIC
+
+  const NavBarSaved = document.getElementById("savedMessages");
+  const NavBarAutomatic = document.getElementById("automaticMessage");
+  NavBarSaved.addEventListener("click", () => {
+    addAndRemoveButtons.style.display = "inline";
+    automaticMessageWrapper.style.display = "none";
+    NavBarSaved.style.textDecoration = "underline";
+    NavBarAutomatic.style.textDecoration = "none";
+  });
+  NavBarAutomatic.addEventListener("click", () => {
+    addAndRemoveButtons.style.display = "none";
+    automaticMessageWrapper.style.display = "inline";
+    NavBarSaved.style.textDecoration = "none";
+    NavBarAutomatic.style.textDecoration = "underline";
+  });
+
   addMessageButton = document.getElementById("addMessage");
   removeAllMessagesButton = document.getElementById("removeAllButtons");
   automaticMessageButton = document.getElementById("automaticMessageButton");
