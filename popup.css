@@ -64,6 +64,7 @@ img {
 }
 
 #textInput {
+  outline: none;
   vertical-align: middle;
   margin: 0 5px 0;
   resize: none;
@@ -97,6 +98,7 @@ img {
   opacity: 0.5;
 }
 #emojiSelector {
+  outline: none;
   vertical-align: middle;
   height: 22px;
   width: 50px;
@@ -112,6 +114,7 @@ img {
 }
 
 #deletefrompopup {
+  outline: none;
   background: #f44336;
   color: white;
   border-radius: 50%;
@@ -134,11 +137,13 @@ img {
   margin: 0 0 20px;
 }
 .NavBarButton {
+  outline: none;
   color: #f44336;
   border: none;
   background-color: transparent;
   font-weight: bold;
+  transition: 0.3s;
 }
 #automaticMessage {
-  color: white;
+  color: gray;
 }

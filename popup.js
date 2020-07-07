@@ -242,12 +242,12 @@ const elementsCreationAndLogic = () => {
     addAndRemoveButtons.style.display = "inline";
     automaticMessageWrapper.style.display = "none";
     NavBarSaved.style.color = "#f44336";
-    NavBarAutomatic.style.color = "white";
+    NavBarAutomatic.style.color = "gray";
   });
   NavBarAutomatic.addEventListener("click", () => {
     addAndRemoveButtons.style.display = "none";
     automaticMessageWrapper.style.display = "inline";
-    NavBarSaved.style.color = "white";
+    NavBarSaved.style.color = "gray";
     NavBarAutomatic.style.color = "#f44336";
   });
 
