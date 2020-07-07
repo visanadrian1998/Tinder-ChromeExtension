@@ -122,14 +122,14 @@ const createDeleteButton = (
   selectedMessage,
   messagesArray,
   emojisArray,
-  container
+  container,
+  addMessageButton
 ) => {
   const deleteFromPopup = document.createElement("input");
   deleteFromPopup.type = "button";
   deleteFromPopup.value = "×";
   deleteFromPopup.id = "deletefrompopup";
   elementToInsertAfter.insertAdjacentElement("afterend", deleteFromPopup);
-
   //WHEN WE DELETE A MESSAGE:
   deleteFromPopup.onclick = async function () {
     //FIRST WE FETCH THE UPDATED ELEMENTS TO BE UP TO DATE
@@ -138,6 +138,8 @@ const createDeleteButton = (
     changeableEmojis = await getEmojisFromStorage();
     //ADD THE EMOJI BACK TO THE ARRAY OF AVAILABLE EMOJIS
     changeableEmojis.push(selectedEmoji);
+
+    addMessageButton.disabled = false;
 
     //REMOVE THE MESSAGE FROM THE ARRAY OF MESSAGES
     messagesArray = messagesArray.filter((name) => name != selectedMessage);
@@ -206,7 +208,8 @@ const setMessageButtonLogic = (
       message,
       savedMessages,
       usedEmojis,
-      messageContainer
+      messageContainer,
+      addMessageButton
     );
 
     //IF THERE ARE NO AVAILABLE EMOJIS THAT MEANS WE USED ALL OF THEM SO WE CAN'T ADD NO MORE MESSAGES.
@@ -375,7 +378,8 @@ async function updatePopup() {
       savedMessages[i],
       savedMessages,
       usedEmojis,
-      messageContainer
+      messageContainer,
+      document.getElementById("addMessage")
     );
   }
 }
