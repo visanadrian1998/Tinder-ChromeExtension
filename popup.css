@@ -12,7 +12,7 @@ body {
 }
 h1 {
   color: #fd5068;
-  font-family: SEGOE UI;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .ImageWrapperCss {
   padding-top: 15px;
@@ -63,6 +63,7 @@ img {
   font-size: 16px;
 }
 #messageContainer {
+  display: flex;
   align-items: center;
   margin: 0 0 10px;
   transition: 1.5s;
@@ -81,10 +82,11 @@ textarea {
   background: #ffffff;
   border: 0.5px solid #adadad;
   box-sizing: border-box;
-  font-family: SF UI Text;
+  font-family: font92671;
   font-size: 13px;
   line-height: 25px;
   letter-spacing: -0.1px;
+  color: #aaaaaa;
 }
 textarea::-webkit-scrollbar {
   display: none;
@@ -137,13 +139,20 @@ textarea::placeholder {
   position: relative;
   outline: none;
   vertical-align: middle;
-  height: 22px;
-  width: 50px;
+  height: 31px;
+  width: 31px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+  background: transparent;
+  border: 2px solid #dfdfdf;
+  margin: 0 1px 0;
+  padding: 0 6px 0;
 }
 
 #deletefrompopup {
   position: relative;
-  top: 5px;
   outline: none;
   border-radius: 50%;
   width: 30px;
@@ -214,4 +223,15 @@ textarea::placeholder {
 }
 #automaticMessageButton {
   margin: 0 0 15px;
+}
+.emojiContainer {
+  position: relative;
+  height: 28px;
+  width: 28px;
+  border: 2px solid #dfdfdf;
+  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px 0;
 }

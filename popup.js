@@ -210,13 +210,20 @@ const setMessageButtonLogic = (
     //SEND THE MESSAGE AND THE EMOJI TO CONTENT
     chrome.tabs.sendMessage(tabId, { addmessage: message, addemoji: emoji });
 
-    //TEXT INPUT AND EMOJI SELECTOR DISABLED;SET BUTTON DISSAPEARS
+    //TEXT INPUT DISABLED; EMOJI SELECTOR AND SET BUTTON DISSAPEARS
     messageText.readOnly = true;
     setMessageButton.style.display = "none";
-    emojiSelector.disabled = true;
+    //emojiSelector.disabled = true;
+    emojiSelector.style.display = "none";
+
+    //CREATE EMOJI CONTAINER
+    emojiContainer = document.createElement("div");
+    emojiContainer.classList.add("emojiContainer");
+    emojiContainer.innerHTML = emoji;
+    messageText.insertAdjacentElement("afterend", emojiContainer);
 
     createDeleteButton(
-      emojiSelector,
+      emojiContainer,
       emoji,
       message,
       savedMessages,
@@ -298,7 +305,6 @@ const elementsCreationAndLogic = () => {
     const emojiSelector = document.createElement("select");
     //CREATE "SET" BUTTON
     const setMessageButton = document.createElement("input");
-
     messageTextLogic(messageText, messageContainer, setMessageButton, true, "");
     emojiSelectorLogic(emojiSelector, true, "");
 
@@ -376,7 +382,7 @@ async function updatePopup() {
     messageContainer.id = "messageContainer";
 
     const messageText = document.createElement("textarea");
-    const emojiSelector = document.createElement("select");
+    //const emojiSelector = document.createElement("select");
     messageTextLogic(
       messageText,
       messageContainer,
@@ -384,19 +390,22 @@ async function updatePopup() {
       false,
       savedMessages[i]
     );
-    emojiSelectorLogic(emojiSelector, false, usedEmojis[i]);
+    const emojiContainer = document.createElement("div");
+    emojiContainer.classList.add("emojiContainer");
+    emojiContainer.innerHTML = usedEmojis[i];
+    //emojiSelectorLogic(emojiSelector, false, usedEmojis[i]);
 
     fillContainerWithElements(
       messageContainer,
       messageText,
       addMessageButton,
-      emojiSelector,
+      emojiContainer,
       "",
       true
     );
 
     createDeleteButton(
-      emojiSelector,
+      emojiContainer,
       usedEmojis[i],
       savedMessages[i],
       savedMessages,
