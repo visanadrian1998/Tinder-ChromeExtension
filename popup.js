@@ -27,6 +27,7 @@ const runApp = (tab) => {
     NavBar.style.display = "none";
     addAndRemoveButtons.style.display = "none";
     automaticMessageWrapper.style.display = "none";
+    NavBarScroll.style.display = "none";
     notOnTinder.style.display = "inline";
 
     //CLICKING ON LINK -> CREATE NEW TAB THAT TAKES YOU TO TINDER.COM
@@ -59,13 +60,15 @@ const fillContainerWithElements = (
 
   //ADD CONTAINER IN FRONT OF ADD&REMOVE BUTTONS
   addMessageButton.insertAdjacentElement("beforebegin", container);
-
-  //INSERT EMOJI SELECTOR AFTER TEXT INPUT
-  textInput.insertAdjacentElement("afterend", emojiSelector);
-
   if (!noSetButton) {
-    //INSERT SET BUTTON AFTER EMOJI SELECTOR
-    emojiSelector.insertAdjacentElement("afterend", setButton);
+    //INSERT SET BUTTON AFTER TEXT INPUT
+    textInput.insertAdjacentElement("afterend", setButton);
+    //INSERT EMOJI SELECTOR AFTER EMOJI SELECTOR
+    setButton.insertAdjacentElement("afterend", emojiSelector);
+    emojiSelector.style.left = "-37px";
+  } else {
+    //INSERT EMOJI SELECTOR AFTER TEXT INPUT
+    textInput.insertAdjacentElement("afterend", emojiSelector);
   }
 };
 
@@ -80,6 +83,7 @@ const messageTextLogic = (
   //WHEN WE CLICK ON A MESSAGE THE TEXTAREA EXPANDS AND ALSO WE CHANGE THE ALIGNMENT OF ITEMS
   messageText.id = "textInput";
   messageText.type = "text";
+  messageText.placeholder = "Type a Message...";
   if (!editable) {
     messageText.readOnly = true;
     messageText.value = value;
@@ -180,7 +184,7 @@ const setMessageButtonLogic = (
   //SETMESSAGEBUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
   setMessageButton.disabled = true;
   setMessageButton.type = "button";
-  setMessageButton.value = "SET!";
+  setMessageButton.value = "Save";
   setMessageButton.id = "setMessageButton";
 
   //ADDMESSAGEBUTTON IS DISABLED UNTIL WE SET THE CURRENT MESSAGE
@@ -189,6 +193,8 @@ const setMessageButtonLogic = (
   setMessageButton.addEventListener("click", function () {
     //ENABLE THE ADD MESSAGE BUTTON WHEN WE SET THE CURRENT MESSAGE
     addMessageButton.disabled = false;
+
+    emojiSelector.style.left = "0px";
 
     const message = messageText.value;
     const emoji = emojiSelector.value;
@@ -253,17 +259,22 @@ const elementsCreationAndLogic = () => {
 
   const NavBarSaved = document.getElementById("savedMessages");
   const NavBarAutomatic = document.getElementById("automaticMessage");
+  const NavBarScroll = document.getElementById("NavBarScroll");
   NavBarSaved.addEventListener("click", () => {
     addAndRemoveButtons.style.display = "inline";
     automaticMessageWrapper.style.display = "none";
-    NavBarSaved.style.color = "#f44336";
-    NavBarAutomatic.style.color = "gray";
+    NavBarSaved.style.color = "white";
+    NavBarAutomatic.style.color = "#FD5068";
+    NavBarScroll.style.transform = "translateX(0px)";
+    NavBarScroll.style.width = "126px";
   });
   NavBarAutomatic.addEventListener("click", () => {
     addAndRemoveButtons.style.display = "none";
     automaticMessageWrapper.style.display = "inline";
-    NavBarSaved.style.color = "gray";
-    NavBarAutomatic.style.color = "#f44336";
+    NavBarSaved.style.color = "#FD5068";
+    NavBarAutomatic.style.color = "white";
+    NavBarScroll.style.transform = "translateX(119px)";
+    NavBarScroll.style.width = "150px";
   });
 
   addMessageButton = document.getElementById("addMessage");

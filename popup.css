@@ -2,22 +2,25 @@
   width: 450px;
   text-align: center;
   margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 body {
-  background-image: linear-gradient(200deg, #ffffff 0%, #84fab0 100%);
+  background-color: #eff3f7;
   margin: 0;
 }
 h1 {
-  color: #f44336;
+  color: #fd5068;
   font-family: SEGOE UI;
 }
 .ImageWrapperCss {
   padding-top: 15px;
-  margin: 0 0 20px;
+  margin: 0 0 25px;
 }
 img {
-  height: 30%;
-  width: 30%;
+  height: 20%;
+  width: 20%;
 }
 .ButtonWrapperCss {
   align-items: center;
@@ -27,27 +30,31 @@ img {
 }
 
 .popUpButton {
-  border: 1px solid #2196f3;
-  background: #2196f3;
+  border: 2px solid #fe5068;
+  background: linear-gradient(270deg, #ff7456 0%, #fd267d 100%);
+  border-radius: 100px;
   color: white;
-  width: 210px;
+  width: 240px;
+  height: 37px;
   padding: 8px 16px;
-  border-radius: 4px;
   cursor: pointer;
   outline: none;
   transition: all 0.2s ease;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   margin: 5px;
-  font-weight: bold;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 15px;
 }
 
-.popUpButton:hover {
-  border: 1px solid #03a9f4;
-  background: #03a9f4;
-}
 .popUpButton:disabled {
   pointer-events: none;
   opacity: 0.5;
+}
+#removeAllButtons {
+  color: #fe5068;
+  background: transparent;
 }
 .notOnTinder {
   display: none;
@@ -56,23 +63,52 @@ img {
   font-size: 16px;
 }
 #messageContainer {
-  display: flex;
   align-items: center;
-  padding-left: 137px;
   margin: 0 0 10px;
   transition: 1.5s;
 }
 
-#textInput {
+textarea {
+  position: relative;
+  padding-left: 8px;
+  padding-right: 50px;
   outline: none;
   vertical-align: middle;
   margin: 0 5px 0;
   resize: none;
+  width: 240px;
+  height: 30px;
+  background: #ffffff;
+  border: 0.5px solid #adadad;
+  box-sizing: border-box;
+  font-family: SF UI Text;
+  font-size: 13px;
+  line-height: 25px;
+  letter-spacing: -0.1px;
 }
-#textInput::-webkit-scrollbar {
+textarea::-webkit-scrollbar {
   display: none;
 }
+textarea::placeholder {
+  padding: 3px 0px 3px;
+  line-height: 18px;
+  color: #aaaaaa;
+}
 #setMessageButton {
+  position: relative;
+  left: -50px;
+  vertical-align: middle;
+  background-color: transparent;
+  color: black;
+  cursor: pointer;
+  outline: none;
+  text-align: center;
+  border: none;
+}
+#setMessageButton:disabled {
+  color: #dfdfdf;
+}
+/* #setMessageButton {
   vertical-align: middle;
   margin: 0 5px 0;
   border: 1px solid #2196f3;
@@ -96,58 +132,86 @@ img {
 #setMessageButton:disabled {
   pointer-events: none;
   opacity: 0.5;
-}
+} */
 #emojiSelector {
+  position: relative;
   outline: none;
   vertical-align: middle;
   height: 22px;
   width: 50px;
 }
 
-#removeAllButtons {
-  background-color: #f44336;
-  border: 1px solid #f44336;
-}
-#removeAllButtons:hover {
-  background-color: rgba(0, 0, 0, 0);
-  color: #f44336;
-}
-
 #deletefrompopup {
+  position: relative;
+  top: 5px;
   outline: none;
-  background: #f44336;
-  color: white;
   border-radius: 50%;
+  width: 30px;
+  height: 30px;
   margin: 0 5px 0;
-  font-size: 15px;
+  font-size: 27px;
   font-weight: bold;
-  transition: 0.8s;
+  background: #ffffff;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.05);
+  color: #fe5068;
+  border: none;
+  padding: 0;
 }
 
-#deletefrompopup:hover {
+/* #deletefrompopup:hover {
   transition: 0.8s;
   background-color: white;
   color: #f44336;
   transform: rotate(180deg);
-}
+} */
 #automaticMessageWrapper {
   display: none;
 }
 .NavBar {
-  margin: 0 0 20px;
+  padding: 4px 2px 4px;
+  border: 2px solid #fe5068;
+  box-sizing: border-box;
+  border-radius: 100px;
+  margin: 0 0 30px;
+  width: 60%;
+  max-height: 40px;
+  z-index: 20;
 }
 .NavBarButton {
   outline: none;
-  color: #f44336;
   border: none;
   background-color: transparent;
-  font-weight: bold;
+  font-style: normal;
+  font-weight: 600;
   transition: 0.3s;
 }
+#savedMessages {
+  color: white;
+}
 #automaticMessage {
-  color: gray;
+  color: #fe5068;
 }
 #noMatchesText {
   display: none;
-  color: #f44336;
+  color: #b8b8ba;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+}
+#NavBarScroll {
+  position: absolute;
+  background: linear-gradient(270deg, #ff7456 0%, #fd267d 100%);
+  width: 126px;
+  height: 29px;
+  border-radius: 100px;
+  top: 198px;
+  left: 91px;
+  transition: 0.3s;
+}
+#automaticMessageInput {
+  margin: 0 0 26px;
+}
+#automaticMessageButton {
+  margin: 0 0 15px;
 }

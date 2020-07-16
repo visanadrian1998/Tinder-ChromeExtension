@@ -170,6 +170,14 @@ function insertAddedMessages() {
   const chatbox = document.getElementsByClassName(
     "D(f) W(100%) BdT Bdtc($c-divider) Bgc(#fff) Pos(r)"
   )[0];
+  //ADD HEADER TEXT ABOVE BUTTONS;DISPLAY ONLY IF WE HAVE BUTTONS
+  const buttonsHeader = document.createElement("p");
+  buttonsHeader.textContent = "Auto messages";
+  buttonsHeader.classList.add("buttonsHeader");
+  addedButtons.length == 0
+    ? (buttonsHeader.style.display = "none")
+    : (buttonsHeader.style.display = "block");
+  chatbox.insertAdjacentElement("afterbegin", buttonsHeader);
   for (let i = 0; i < addedButtons.length; i++) {
     try {
       chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
