@@ -32,7 +32,23 @@ const createButton = (message) => {
     console.log(e);
   }
 };
-
+const editMessage = (message) => {
+  buttonMessages.map((messageToBeReplaced) => {
+    if (messageToBeReplaced === message.messageToBeReplaced) {
+      messageToBeReplaced = message.editMessage;
+      return;
+    }
+  });
+  addedButtons.map((messageToBeReplaced) => {
+    console.log(messageToBeReplaced.name);
+    console.log(message.messageToBeReplaced);
+    if (messageToBeReplaced.name === message.messageToBeReplaced) {
+      messageToBeReplaced.name = message.editMessage;
+      console.log(messageToBeReplaced);
+      return;
+    }
+  });
+};
 chrome.runtime.onMessage.addListener((message) => {
   if (message.addmessage) {
     createButton(message);
@@ -49,6 +65,10 @@ chrome.runtime.onMessage.addListener((message) => {
   }
   if (message.sendAutomatic) {
     sendAutomaticMessage(message.sendAutomatic);
+  }
+  if (message.editMessage) {
+    editMessage(message);
+    insertAddedMessages();
   }
 });
 async function enterConversationSendMessage(match, message) {
@@ -177,7 +197,7 @@ function insertAddedMessages() {
   addedButtons.length == 0
     ? (buttonsHeader.style.display = "none")
     : (buttonsHeader.style.display = "block");
-  chatbox.insertAdjacentElement("afterbegin", buttonsHeader);
+  chatbox && chatbox.insertAdjacentElement("afterbegin", buttonsHeader);
   for (let i = 0; i < addedButtons.length; i++) {
     try {
       chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
@@ -250,7 +270,7 @@ async function updateButtons() {
 function exitConversation() {
   try {
     const exit = document.getElementsByClassName(
-      "C($c-divider) Bdc($c-divider) Bdc($c-gray):h C($c-gray):h Bdrs(50%) Bds(s) Bdw(3px) Trsdu($fast) Trsp($transform) Rotate(-90deg):h--ml close P(0) Lh(1) Cur(p) focus-button-style"
+      "C($c-divider) Bdc($c-divider) Bdc($c-light-bluegray):h C($c-light-bluegray):h Bdrs(50%) Bds(s) Bdw(3px) Trsdu($fast) Trsp($transform) Rotate(-90deg):h--ml close P(0) Lh(1) Cur(p) focus-button-style"
     )[0];
     exit.click();
   } catch (e) {
