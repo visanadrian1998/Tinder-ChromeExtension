@@ -40,11 +40,8 @@ const editMessage = (message) => {
     }
   });
   addedButtons.map((messageToBeReplaced) => {
-    console.log(messageToBeReplaced.name);
-    console.log(message.messageToBeReplaced);
     if (messageToBeReplaced.name === message.messageToBeReplaced) {
       messageToBeReplaced.name = message.editMessage;
-      console.log(messageToBeReplaced);
       return;
     }
   });

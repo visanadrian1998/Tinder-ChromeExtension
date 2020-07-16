@@ -183,7 +183,8 @@ const setMessageButtonLogic = (
   addMessageButton,
   messageText,
   emojiSelector,
-  messageContainer
+  messageContainer,
+  justCreated
 ) => {
   //SETMESSAGEBUTTON IS DISABLED IF THE TEXT INPUT IS EMPTY
   if (setMessageButton.value === "Save") {
@@ -198,11 +199,16 @@ const setMessageButtonLogic = (
     if (setMessageButton.value === "Save") {
       //ENABLE THE ADD MESSAGE BUTTON WHEN WE SET THE CURRENT MESSAGE
       addMessageButton ? (addMessageButton.disabled = false) : null;
-      emojiSelector.style.left = "0px";
-
+      if (justCreated) {
+        emojiSelector.style.left = "0px";
+      }
+      emojiSelector.style.left = "-37px";
       const message = messageText.value;
-      const emoji = emojiSelector.value;
+      const emoji = emojiSelector.value || emojiSelector.innerHTML;
+      console.log(emoji);
+      console.log(message);
       const index = usedEmojis.indexOf(emoji);
+      console.log(index);
       const messageToBeReplaced = savedMessages[index];
       if (messageText.name !== "edited") {
         savedMessages.push(message);
@@ -234,10 +240,13 @@ const setMessageButtonLogic = (
       //TEXT INPUT DISABLED; EMOJI SELECTOR DISSAPEARS;SAVE BUTTON -> EDIT BUTTOn
       messageText.readOnly = true;
       setMessageButton.value = "Edit";
-      setMessageButton.style.left = "-131px";
+      if (justCreated) {
+        setMessageButton.style.left = "-131px";
+      }
       //emojiSelector.disabled = true;
-      emojiSelector.style.display = "none";
-
+      if (justCreated) {
+        emojiSelector.style.display = "none";
+      }
       if (messageText.name !== "edited") {
         //CREATE EMOJI CONTAINER
         emojiContainer = document.createElement("div");
@@ -262,6 +271,7 @@ const setMessageButtonLogic = (
       }
     } else {
       if (setMessageButton.value === "Edit") {
+        emojiSelector.style.left = "-45px";
         messageText.readOnly = false;
         setMessageButton.value = "Save";
         messageText.name = "edited";
@@ -353,7 +363,8 @@ const elementsCreationAndLogic = () => {
       addMessageButton,
       messageText,
       emojiSelector,
-      messageContainer
+      messageContainer,
+      true
     );
   });
 };
@@ -434,7 +445,8 @@ async function updatePopup() {
       null,
       messageText,
       emojiContainer,
-      messageContainer
+      messageContainer,
+      false
     );
 
     fillContainerWithElements(
