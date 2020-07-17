@@ -88,11 +88,14 @@ async function enterConversationSendMessage(match, message) {
             textarea.dispatchEvent(event);
           }
           //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
-          const submit = document.getElementsByClassName("chat")[0].lastChild
-            .lastChild.lastChild;
-
-          if (submit) {
-            submit.click();
+          try {
+            const submit = document.getElementsByClassName("chat")[0].lastChild
+              .lastChild.lastChild;
+            if (submit) {
+              submit.click();
+            }
+          } catch (e) {
+            console.log(e);
           }
         }
         resolve(match);
@@ -149,7 +152,8 @@ const runApp = () => {
       try {
         this.setTimeout(function () {
           insertAddedMessages();
-          getMessagesFromConversation();
+          disableButtonOnClick();
+          //getMessagesFromConversation();
         }, 1500);
       } catch (e) {
         this.console.log(e);
@@ -284,8 +288,23 @@ const getMessagesFromConversation = () => {
   const arrayOfMessages = [];
   const arrayOfMessageBoxes = document.getElementsByClassName("msg BreakWord");
   Array.from(arrayOfMessageBoxes).forEach((messageBox) => {
-    console.log(messageBox.textContent);
     arrayOfMessages.push(messageBox.textContent);
   });
   return arrayOfMessages;
+};
+
+//WHEN SENDING A MESSAGE CHECK IF IT WAS A PREDEFINED MESSAGE -> IF SO DISABLE THE BUTTON
+const disableButtonOnClick = () => {
+  const submit = document.getElementsByClassName("chat")[0].lastChild.lastChild
+    .lastChild;
+  submit.addEventListener("click", () => {
+    setTimeout(() => {
+      const conversationMessages = getMessagesFromConversation();
+      addedButtons.map((button) => {
+        if (conversationMessages.includes(button.name)) {
+          button.disabled = true;
+        }
+      });
+    }, 500);
+  });
 };
