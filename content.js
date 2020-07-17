@@ -88,9 +88,9 @@ async function enterConversationSendMessage(match, message) {
             textarea.dispatchEvent(event);
           }
           //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
-          const submit = document.getElementsByClassName(
-            "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
-          )[0];
+          const submit = document.getElementsByClassName("chat")[0].lastChild
+            .lastChild.lastChild;
+
           if (submit) {
             submit.click();
           }
@@ -102,9 +102,7 @@ async function enterConversationSendMessage(match, message) {
 }
 const sendAutomaticMessage = async (message) => {
   //SELECT ALL AVAILABLE MATCHES
-  let matches = document.getElementsByClassName(
-    "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
-  );
+  let matches = document.getElementsByClassName("matchListItem");
   if (matches.length <= 1) {
     chrome.runtime.sendMessage(
       {
@@ -119,9 +117,7 @@ const sendAutomaticMessage = async (message) => {
     }
 
     //IF THERE ARE REMAINING MATCHES THAT WERE NOT SELECTED WE ITERATE THEM AGAIN
-    matches = document.getElementsByClassName(
-      "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
-    );
+    matches = document.getElementsByClassName("matchListItem");
     matches.length > 1 ? sendAutomaticMessage(message) : "";
   }
 };
@@ -188,9 +184,7 @@ function sendMessage(message) {
 
 function insertAddedMessages() {
   //FOR EVERY BUTTON WE SELECT THE CHATBOX AND WE INSERT THE BUTTON TO BE DISPLAYED
-  const chatbox = document.getElementsByClassName(
-    "D(f) W(100%) BdT Bdtc($c-divider) Bgc(#fff) Pos(r)"
-  )[0];
+  const chatbox = document.getElementsByClassName("chat")[0].lastChild;
   //ADD HEADER TEXT ABOVE BUTTONS;DISPLAY ONLY IF WE HAVE BUTTONS
   const buttonsHeader = document.createElement("p");
   buttonsHeader.textContent = "Auto messages";
@@ -277,9 +271,8 @@ async function updateButtons() {
 
 function exitConversation() {
   try {
-    const exit = document.getElementsByClassName(
-      "C($c-divider) Bdc($c-divider) Bdc($c-light-bluegray):h C($c-light-bluegray):h Bdrs(50%) Bds(s) Bdw(3px) Trsdu($fast) Trsp($transform) Rotate(-90deg):h--ml close P(0) Lh(1) Cur(p) focus-button-style"
-    )[0];
+    const exit = document.getElementsByClassName("chat")[0].children[1]
+      .lastChild.firstChild;
     exit.click();
   } catch (e) {
     console.log(e);
