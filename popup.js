@@ -142,7 +142,7 @@ const createDeleteButton = (
   deleteFromPopup.id = "deletefrompopup";
   elementToInsertAfter.insertAdjacentElement("afterend", deleteFromPopup);
   if (rearangeButton) {
-    deleteFromPopup.style.left = "-40px";
+    deleteFromPopup.style.left = "-43px";
   }
   //WHEN WE DELETE A MESSAGE:
   deleteFromPopup.onclick = async function () {
@@ -239,7 +239,7 @@ const setMessageButtonLogic = (
       }
       //TEXT INPUT DISABLED; EMOJI SELECTOR DISSAPEARS;SAVE BUTTON -> EDIT BUTTOn
       messageText.readOnly = true;
-      setMessageButton.value = "Edit";
+      setMessageButton.value = "Edit  ";
       if (justCreated) {
         setMessageButton.style.left = "-131px";
       }
@@ -270,8 +270,8 @@ const setMessageButtonLogic = (
         addMessageButton.disabled = true;
       }
     } else {
-      if (setMessageButton.value === "Edit") {
-        emojiSelector.style.left = "-45px";
+      if (setMessageButton.value === "Edit  ") {
+        emojiSelector.style.left = "-37px";
         messageText.readOnly = false;
         setMessageButton.value = "Save";
         messageText.name = "edited";
@@ -437,7 +437,7 @@ async function updatePopup() {
     emojiContainer.innerHTML = usedEmojis[i];
     const editButton = document.createElement("input");
     editButton.type = "button";
-    editButton.value = "Edit";
+    editButton.value = "Edit  ";
     editButton.id = "setMessageButton";
 
     setMessageButtonLogic(

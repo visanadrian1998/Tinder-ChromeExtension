@@ -237,4 +237,5 @@ textarea::placeholder {
   align-items: center;
   justify-content: center;
   margin: 0 5px 0;
+  left: 6px;
 }
