@@ -53,7 +53,8 @@ const fillContainerWithElements = (
   addMessageButton,
   emojiSelector,
   setButton,
-  noSetButton
+  noSetButton,
+  justCreated
 ) => {
   //ADD TEXT INPUT TO CONTAINER
   container.appendChild(textInput);
@@ -65,7 +66,11 @@ const fillContainerWithElements = (
     textInput.insertAdjacentElement("afterend", setButton);
     //INSERT EMOJI SELECTOR AFTER EMOJI SELECTOR
     setButton.insertAdjacentElement("afterend", emojiSelector);
-    emojiSelector.style.left = "-37px";
+    if (justCreated) {
+      emojiSelector.style.left = "-31px";
+    } else {
+      emojiSelector.style.left = "-37px";
+    }
   } else {
     //INSERT EMOJI SELECTOR AFTER TEXT INPUT
     textInput.insertAdjacentElement("afterend", emojiSelector);
@@ -142,7 +147,9 @@ const createDeleteButton = (
   deleteFromPopup.id = "deletefrompopup";
   elementToInsertAfter.insertAdjacentElement("afterend", deleteFromPopup);
   if (rearangeButton) {
-    deleteFromPopup.style.left = "-43px";
+    deleteFromPopup.style.left = "-35px";
+  } else {
+    deleteFromPopup.style.left = "7px";
   }
   //WHEN WE DELETE A MESSAGE:
   deleteFromPopup.onclick = async function () {
@@ -355,7 +362,8 @@ const elementsCreationAndLogic = () => {
       addMessageButton,
       emojiSelector,
       setMessageButton,
-      false
+      false,
+      true
     );
 
     setMessageButtonLogic(
@@ -455,6 +463,7 @@ async function updatePopup() {
       addMessageButton,
       emojiContainer,
       editButton,
+      false,
       false
     );
 
