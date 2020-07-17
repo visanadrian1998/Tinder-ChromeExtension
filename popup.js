@@ -1,6 +1,6 @@
 let tabId = null;
-const stockEmojis = ["✪", "✂", "☎", "♛", "♫", "☯", "⚖"];
-let changeableEmojis = ["✪", "✂", "☎", "♛", "♫", "☯", "⚖"];
+const stockEmojis = ["🤖", "👽", "🎃", "😈", "🥶", "🧙", "👣"];
+let changeableEmojis = ["🤖", "👽", "🎃", "😈", "🥶", "🧙", "👣"];
 
 chrome.runtime.onMessage.addListener((message) => {
   if (message.noMatches) {

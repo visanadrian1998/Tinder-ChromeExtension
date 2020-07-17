@@ -152,7 +152,7 @@ textarea::placeholder {
   background: transparent;
   border: 2px solid #dfdfdf;
   margin: 0;
-  padding: 0 6px 0;
+  padding: 0 4px 0;
   left: -1px;
 }
 

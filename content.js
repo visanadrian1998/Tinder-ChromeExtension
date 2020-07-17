@@ -203,7 +203,7 @@ function insertAddedMessages() {
     try {
       chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
 
-      addedButtons[i].style.left = `${40 * i}px`;
+      addedButtons[i].style.left = `${50 * i}px`;
 
       //IF THE BUTTON MESSAGE EXISTS IN CONVERSATION WE DISABLE THE BUTTON
       if (conversationMessages.includes(addedButtons[i].name)) {
