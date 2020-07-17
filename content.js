@@ -74,22 +74,26 @@ async function enterConversationSendMessage(match, message) {
       //ACCESS THE MATCH CONVERSATION
       match.click();
       setTimeout(() => {
-        window.InputEvent = window.Event || window.InputEvent;
-        var event = new InputEvent("input", {
-          bubbles: true,
-        });
-        //SELECT THE MESSAGE AREA -> INSERT OUR MESSAGE -> SEND IT
-        const textarea = document.getElementById("chat-text-area");
-        if (textarea) {
-          textarea.value = message;
-          textarea.dispatchEvent(event);
-        }
-        //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
-        const submit = document.getElementsByClassName(
-          "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
-        )[0];
-        if (submit) {
-          submit.click();
+        //CHECK IF MESSAGE HAS ALREADY BEEN SO WE DON'T SEND THE MESSAGE TWO TIMES BY ERROR
+        const conversationMessages = getMessagesFromConversation();
+        if (conversationMessages.length == 0) {
+          window.InputEvent = window.Event || window.InputEvent;
+          var event = new InputEvent("input", {
+            bubbles: true,
+          });
+          //SELECT THE MESSAGE AREA -> INSERT OUR MESSAGE -> SEND IT
+          const textarea = document.getElementById("chat-text-area");
+          if (textarea) {
+            textarea.value = message;
+            textarea.dispatchEvent(event);
+          }
+          //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
+          const submit = document.getElementsByClassName(
+            "button Lts($ls-s) Z(0) CenterAlign Mx(a) Cur(p) Tt(u) Ell Bdrs(100px) Px(24px) Px(20px)--s Py(0) Mih(40px) Pos(r) Ov(h) C(#fff) Bg($c-pink):h::b Bg($c-pink):f::b Bg($c-pink):a::b Trsdu($fast) Trsp($background) Bg($primary-gradient) button--primary-shadow StyledButton Fw($semibold) focus-button-style Mb(16px) As(fe)"
+          )[0];
+          if (submit) {
+            submit.click();
+          }
         }
         resolve(match);
       }, 3000);
@@ -101,7 +105,6 @@ const sendAutomaticMessage = async (message) => {
   let matches = document.getElementsByClassName(
     "matchListItem D(ib) Pos(r) Ta(c) H(120px) H(180px)--m W(100%) Trsdu($normal) Wc($transform) Scale(1.1):h Op(1):h Mx(0)! focus-button-style"
   );
-  console.log(matches.length);
   if (matches.length <= 1) {
     chrome.runtime.sendMessage(
       {
@@ -150,7 +153,8 @@ const runApp = () => {
       try {
         this.setTimeout(function () {
           insertAddedMessages();
-        }, 500);
+          getMessagesFromConversation();
+        }, 1500);
       } catch (e) {
         this.console.log(e);
       }
@@ -195,11 +199,18 @@ function insertAddedMessages() {
     ? (buttonsHeader.style.display = "none")
     : (buttonsHeader.style.display = "block");
   chatbox && chatbox.insertAdjacentElement("afterbegin", buttonsHeader);
+  const conversationMessages = getMessagesFromConversation();
   for (let i = 0; i < addedButtons.length; i++) {
+    addedButtons[i].disabled = false;
     try {
       chatbox.insertAdjacentElement("afterbegin", addedButtons[i]);
 
       addedButtons[i].style.left = `${40 * i}px`;
+
+      //IF THE BUTTON MESSAGE EXISTS IN CONVERSATION WE DISABLE THE BUTTON
+      if (conversationMessages.includes(addedButtons[i].name)) {
+        addedButtons[i].disabled = true;
+      }
 
       // UNCOMMENT IF YOU WANT TO PREVIEW MESSAGE ON BUTTON HOVER
       // addedButtons[i].onmouseover = function () {
@@ -274,3 +285,14 @@ function exitConversation() {
     console.log(e);
   }
 }
+
+//GET ALL THE MESSAGES FROM THE CONVERSATION
+const getMessagesFromConversation = () => {
+  const arrayOfMessages = [];
+  const arrayOfMessageBoxes = document.getElementsByClassName("msg BreakWord");
+  Array.from(arrayOfMessageBoxes).forEach((messageBox) => {
+    console.log(messageBox.textContent);
+    arrayOfMessages.push(messageBox.textContent);
+  });
+  return arrayOfMessages;
+};
