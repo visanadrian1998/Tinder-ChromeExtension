@@ -89,8 +89,10 @@ async function enterConversationSendMessage(match, message) {
           }
           //SELECT THE SUBMIT BUTTON AND SEND THE MESSAGE
           try {
-            const submit = document.getElementsByClassName("chat")[0].lastChild
-              .lastChild.lastChild;
+            const submit = document.getElementsByClassName("chat")[0]
+              ? document.getElementsByClassName("chat")[0].lastChild.lastChild
+                  .lastChild
+              : null;
             if (submit) {
               submit.click();
             }
@@ -124,7 +126,23 @@ const sendAutomaticMessage = async (message) => {
     matches.length > 1 ? sendAutomaticMessage(message) : "";
   }
 };
+
+const checkForNewMatches = () => {
+  // setTimeout(() => {
+  //   let initialMatches = document.getElementsByClassName("matchListItem");
+  //   console.log(initialMatches.length);
+  // }, 1000);
+  // setInterval(() => {
+  //   const newMatches = document.getElementsByClassName("matchListItem");
+  //   console.log(newMatches.length);
+  //   if (newMatches.length !== initialMatches.length) {
+  //     initialMatches = newMatches;
+  //   }
+  // }, 60000);
+};
+
 const runApp = () => {
+  checkForNewMatches();
   window.addEventListener("click", function () {
     //IF THE URL DOESNT INCLUDE "MESSAGE" OR THE CURRENT LOCATION DOESN'T MATCH THE LAST CONVERSATION URL ->
     if (
@@ -188,7 +206,9 @@ function sendMessage(message) {
 
 function insertAddedMessages() {
   //FOR EVERY BUTTON WE SELECT THE CHATBOX AND WE INSERT THE BUTTON TO BE DISPLAYED
-  const chatbox = document.getElementsByClassName("chat")[0].lastChild;
+  const chatbox = document.getElementsByClassName("chat")[0]
+    ? document.getElementsByClassName("chat")[0].lastChild
+    : null;
   //ADD HEADER TEXT ABOVE BUTTONS;DISPLAY ONLY IF WE HAVE BUTTONS
   const buttonsHeader = document.createElement("p");
   buttonsHeader.textContent = "Auto messages";
@@ -275,8 +295,10 @@ async function updateButtons() {
 
 function exitConversation() {
   try {
-    const exit = document.getElementsByClassName("chat")[0].children[1]
-      .lastChild.firstChild;
+    const exit = document.getElementsByClassName("chat")[0]
+      ? document.getElementsByClassName("chat")[0].children[1].lastChild
+          .firstChild
+      : null;
     exit.click();
   } catch (e) {
     console.log(e);
@@ -295,8 +317,9 @@ const getMessagesFromConversation = () => {
 
 //WHEN SENDING A MESSAGE CHECK IF IT WAS A PREDEFINED MESSAGE -> IF SO DISABLE THE BUTTON
 const disableButtonOnClick = () => {
-  const submit = document.getElementsByClassName("chat")[0].lastChild.lastChild
-    .lastChild;
+  const submit = document.getElementsByClassName("chat")[0]
+    ? document.getElementsByClassName("chat")[0].lastChild.lastChild.lastChild
+    : null;
   submit.addEventListener("click", () => {
     setTimeout(() => {
       const conversationMessages = getMessagesFromConversation();

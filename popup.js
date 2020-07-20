@@ -212,18 +212,13 @@ const setMessageButtonLogic = (
       emojiSelector.style.left = "-37px";
       const message = messageText.value;
       const emoji = emojiSelector.value || emojiSelector.innerHTML;
-      console.log(emoji);
-      console.log(message);
       const index = usedEmojis.indexOf(emoji);
-      console.log(index);
       const messageToBeReplaced = savedMessages[index];
       if (messageText.name !== "edited") {
         savedMessages.push(message);
         usedEmojis.push(emoji);
       } else {
-        console.log(savedMessages);
         savedMessages[index] = message;
-        console.log(savedMessages);
         chrome.storage.local.set({ name: savedMessages }, function () {});
       }
       if (messageText.name !== "edited") {
